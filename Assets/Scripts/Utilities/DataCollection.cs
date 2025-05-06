@@ -8,7 +8,7 @@ public class ItemDetails
     public string itemName;
     public ItemType itemType;
     public Sprite itemIcon;
-    public Sprite ItemOnWorldSprite;
+    public Sprite itemOnWorldSprite;
     public string itemDescription;
     public int itemUseRadius;
     public bool canPickedUp;

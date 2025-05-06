@@ -1,17 +1,17 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/Editor/UI%20Builder/ItemEditor.uss?fileID=7433441132597879392&amp;guid=f263e14a931a7b24b9676f558b1b1bc4&amp;type=3#ItemEditor" />
     <ui:VisualElement name="Container" style="flex-grow: 1; flex-direction: row;">
         <ui:VisualElement name="ItemList" style="flex-grow: 0; height: 100%; width: 30%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;">
             <ui:VisualElement name="Header" style="flex-grow: 0; flex-direction: row; justify-content: space-between;">
                 <ui:Label tabindex="-1" text="ItemList" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="true" focusable="false" style="font-size: 20px; align-self: auto; -unity-font-style: bold; flex-grow: 1; flex-shrink: 1; -unity-text-align: middle-left; text-overflow: clip;" />
-                <ui:Button text="+" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+                <ui:Button text="+" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AddButton" />
             </ui:VisualElement>
             <ui:ListView name="ListView" show-foldout-header="false" show-add-remove-footer="false" show-border="true" selection-type="Single" fixed-item-height="30" focusable="true" reorderable="true" style="flex-grow: 1; -unity-text-outline-width: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); translate: 0 0;" />
         </ui:VisualElement>
         <ui:ScrollView name="ItemDetails" style="flex-grow: 1; width: 70%;">
             <ui:VisualElement name="Header" style="flex-grow: 0; flex-direction: row; justify-content: space-between;">
                 <ui:Label tabindex="-1" text="Details Information" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="true" focusable="false" style="font-size: 22px; align-self: auto; -unity-font-style: bold; flex-grow: 1; flex-shrink: 1; -unity-text-align: middle-left; text-overflow: clip;" />
-                <ui:Button text="Delete" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+                <ui:Button text="Delete" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeleteButton" />
             </ui:VisualElement>
             <ui:VisualElement name="Content" style="flex-grow: 1; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px;">
                 <ui:VisualElement name="Row1" style="margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
@@ -21,7 +21,7 @@
                         <ui:VisualElement name="General" style="flex-grow: 1; margin-left: 0; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; justify-content: center; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
                             <ui:IntegerField label="ID" value="0" name="ItemID" style="align-items: center; padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px;" />
                             <ui:TextField picking-mode="Ignore" label="Name" name="ItemName" style="padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px;" />
-                            <uie:EnumFlagsField label="Type" name="ItemType" style="padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px;" />
+                            <ui:EnumField label="Type" name="ItemType" style="padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px;" />
                             <uie:ObjectField label="Icon" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="ItemIcon" style="padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px;" />
                             <uie:ObjectField label="OnWorld Sprite" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="ItemSprite" style="padding-top: 3px; padding-right: 3px; padding-bottom: 3px; padding-left: 3px;" />
                         </ui:VisualElement>
@@ -30,7 +30,7 @@
                 <ui:VisualElement name="Row2" style="flex-grow: 1; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
                     <ui:Label tabindex="-1" text="Discription" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Hader" style="padding-left: 10px; flex-grow: 0; padding-top: 3px; padding-bottom: 3px; background-color: rgb(38, 38, 38); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);" />
                     <ui:VisualElement name="Container" style="flex-grow: 1;">
-                        <ui:TextField picking-mode="Ignore" name="Description" style="flex-grow: 1; height: 80px; padding-top: 2px; padding-right: 0; padding-bottom: 2px; padding-left: 0;" />
+                        <ui:TextField picking-mode="Ignore" name="Description" value="aaa" focusable="true" multiline="true" style="flex-grow: 1; height: 80px; padding-top: 2px; padding-right: 0; padding-bottom: 2px; padding-left: 0; -unity-text-align: upper-left; justify-content: flex-start; align-self: auto; align-items: stretch; white-space: nowrap; text-overflow: clip;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="Row3" style="flex-grow: 1; flex-direction: row; justify-content: space-between;">
