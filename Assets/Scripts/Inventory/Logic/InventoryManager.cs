@@ -102,6 +102,28 @@ namespace MFarm.Inventory
                 playerBag.itemList[index] = item;
             }
         }
+        /// <summary>
+        /// player±³°ü·¶Î§ÄÚ½»»»
+        /// </summary>
+        /// <param name="fromIndex"></param>
+        /// <param name="targetIndex"></param>
+        public void SwapItem(int fromIndex, int targetIndex)
+        {
+            InventoryItem currentItem = playerBag.itemList[fromIndex];
+            InventoryItem targetItem = playerBag.itemList[targetIndex];
+
+            if(targetItem.itemID != 0)
+            {
+                playerBag.itemList[fromIndex] = targetItem;
+                playerBag.itemList[targetIndex] = currentItem;
+            }
+            else
+            {
+                playerBag.itemList[targetIndex] = currentItem;
+                playerBag.itemList[fromIndex] = new InventoryItem();
+            }
+            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemList);
+        }
     }
 }
 
