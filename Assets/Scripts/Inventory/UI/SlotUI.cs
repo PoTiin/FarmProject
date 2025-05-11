@@ -72,6 +72,11 @@ namespace MFarm.Inventory
             isSelected = !isSelected;
 
             inventoryUI.UpdateSlotHighlight(slotIndex);
+            if(slotType == SlotType.Bag)
+            {
+                //通知物品被选中后播放动画
+                EventHandler.CallItemSelectedEvent(itemDetails, isSelected);
+            }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -118,16 +123,16 @@ namespace MFarm.Inventory
                 }
                 inventoryUI.UpdateSlotHighlight(-1);
             }
-            else //测试扔在地上
-            {
-                if (itemDetails.canDropped)
-                {
-                    //鼠标对应世界地图坐标
-                    var pos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
-                    EventHandler.CallInstantiateItemInScene(itemDetails.itemId, pos);
-                }
+            //else //测试扔在地上
+            //{
+            //    if (itemDetails.canDropped)
+            //    {
+            //        //鼠标对应世界地图坐标
+            //        var pos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
+            //        EventHandler.CallInstantiateItemInScene(itemDetails.itemId, pos);
+            //    }
                 
-            }
+            //}
         }
 
         
