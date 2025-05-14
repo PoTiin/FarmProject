@@ -19,13 +19,21 @@ namespace MFarm.Inventory
         private void OnEnable()
         {
             EventHandler.UpdateInventoryUI += OnUpdateInventoryUI;
+            EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         }
 
 
         private void OnDisable()
         {
             EventHandler.UpdateInventoryUI -= OnUpdateInventoryUI;
+            EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         }
+
+        private void OnBeforeSceneUnloadEvent()
+        {
+            UpdateSlotHighlight(-1);
+        }
+
         private void Start()
         {
             //给每个格子一个序号
