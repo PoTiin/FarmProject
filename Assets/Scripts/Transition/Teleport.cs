@@ -6,6 +6,7 @@ namespace MFarm.Transition
 {
     public class Teleport : MonoBehaviour
     {
+        [SceneName]
         public string sceneToGo;
         public Vector3 positionToGo;
 
