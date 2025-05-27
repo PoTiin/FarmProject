@@ -54,12 +54,17 @@ public class Player : MonoBehaviour
         {
             PlayerInput();
         }
+        else
+        {
+            isMoving = false;
+        }
         SwitchAnimation();
 
     }
     private void FixedUpdate()
     {
-        Movement();
+        if(!inputDisable)
+            Movement();
     }
     private void PlayerInput()
     {

@@ -1402,7 +1402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fe4186e98c18a48914c9bb98da764a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startSceneName: PersistentScene
+  startSceneName: 01.Field
 --- !u!4 &1808497659
 Transform:
   m_ObjectHideFlags: 0
