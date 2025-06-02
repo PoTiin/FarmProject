@@ -29,10 +29,11 @@ namespace MFarm.Transition
             }
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
-            StartCoroutine(LoadSceneSetActive(startSceneName));
             fadeCanvasGroup = FindObjectOfType<CanvasGroup>();
+            yield return StartCoroutine(LoadSceneSetActive(startSceneName));
+            EventHandler.CallAfterSceneLoadedEvent();
         }
         /// <summary>
         /// 加载场景并设置为激活
