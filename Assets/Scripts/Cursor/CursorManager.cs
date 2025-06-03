@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using MFarm.Map;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -18,6 +19,11 @@ public class CursorManager : MonoBehaviour
     private Vector3Int mouseGridPos;
 
     private bool cursorEnable;
+
+    private bool cursorPositionVaild;
+
+    private ItemDetails currentItem;
+    private Transform playerTransform => FindObjectOfType<Player>().transform;
     private void OnEnable()
     {
         EventHandler.ItemSelectedEvent += OnItemSelectedEvent;
@@ -45,7 +51,7 @@ public class CursorManager : MonoBehaviour
     {
         if (cursorCanvas == null) return;
         cursorImage.transform.position = Input.mousePosition;
-        if (cursorEnable && !InteractWithUI())
+        if (!InteractWithUI()&&cursorEnable)
         {
             SetCursorImage(currentSprite);
             CheckCursorValid();
@@ -66,16 +72,18 @@ public class CursorManager : MonoBehaviour
     {
         currentGrid = FindObjectOfType<Grid>();
         mainCamera = Camera.main;
-        cursorEnable = true;
     }
     private void OnItemSelectedEvent(ItemDetails itemDetails, bool isSelected)
     {
         if (!isSelected)
         {
+            currentItem = null;
+            cursorEnable = false;
             currentSprite = normal;
         }
         else
         {
+            currentItem = itemDetails;
             //WORKFLOW:添加所有类型图片
             currentSprite = itemDetails.itemType switch
             {
@@ -90,19 +98,71 @@ public class CursorManager : MonoBehaviour
                 _ => normal
 
             };
+            cursorEnable = true;
         }
             
     }
+    #region 设置鼠标样式
     private void SetCursorImage(Sprite sprite)
     {
         cursorImage.sprite = sprite;
         cursorImage.color = new Color(1, 1, 1, 1);
     }
+    private void SetCursorVaild()
+    {
+        cursorPositionVaild = true;
+        cursorImage.color = new Color(1, 1, 1, 1);
+    }
+    private void SetCursorInVaild()
+    {
+        cursorPositionVaild = false;
+        cursorImage.color = new Color(1, 0, 0, 0.4f);
+    }
+    #endregion
     private void CheckCursorValid()
     {
         mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
         mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);
-        Debug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
+        var playerGridPos = currentGrid.WorldToCell(playerTransform.position);
+        if(Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadius || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadius)
+        {
+            SetCursorInVaild();
+            return;
+        }
+        TileDetails currentTile = GridMapManager.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
+        if (currentTile != null)
+        {
+            switch (currentItem.itemType)
+            {
+                case ItemType.Seed:
+                    break;
+                case ItemType.Commodity:
+                    if (currentTile.canDropItem && currentItem.canDropped) SetCursorVaild(); else SetCursorInVaild();
+                    break;
+                case ItemType.Furniture:
+                    break;
+                case ItemType.HoeTool:
+                    break;
+                case ItemType.ChopTool:
+                    break;
+                case ItemType.BreakTool:
+                    break;
+                case ItemType.ReapTool:
+                    break;
+                case ItemType.WaterTool:
+                    break;
+                case ItemType.CollectTool:
+                    break;
+                case ItemType.ReapableScenery:
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            SetCursorInVaild();
+        }
     }
     /// <summary>
     /// 是否与UI互动

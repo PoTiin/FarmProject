@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MFarm.Map{
-    public class GridMapManager : MonoBehaviour
+    public class GridMapManager : Singleton<GridMapManager>
     {
         [Header("地图信息")]
         public List<MapData_SO> mapDataList;
@@ -66,6 +67,17 @@ namespace MFarm.Map{
                 return null;
             }
             return tileDetailsDict[key];
+        }
+        /// <summary>
+        /// 根据鼠标网格坐标返回瓦片信息
+        /// </summary>
+        /// <param name="mouseGridPos">鼠标网格坐标</param>
+        /// <returns></returns>
+        public TileDetails GetTileDetailsOnMousePosition(Vector3Int mouseGridPos)
+        {
+            string key = $"{mouseGridPos.x}x{mouseGridPos.y}y{SceneManager.GetActiveScene().name}";
+            Debug.Log(key);
+            return GetTileDetails(key);
         }
     }
 }

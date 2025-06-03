@@ -1,6 +1,6 @@
 using UnityEditor;
 using UnityEngine;
-
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(SceneNameAttribute))]
 public class SceneNameDrawer : PropertyDrawer
 {
@@ -23,12 +23,15 @@ public class SceneNameDrawer : PropertyDrawer
         var scenes = EditorBuildSettings.scenes;
         //初始化数组
         sceneNames = new GUIContent[scenes.Length];
+
         for (int i = 0; i < sceneNames.Length; i++)
         {
             string path = scenes[i].path;
             string[] splitPath = path.Split(scenePathSplit, System.StringSplitOptions.RemoveEmptyEntries);
+
             string sceneName = "";
-            if(splitPath.Length > 0)
+
+            if (splitPath.Length > 0)
             {
                 sceneName = splitPath[splitPath.Length - 1];
             }
@@ -38,11 +41,11 @@ public class SceneNameDrawer : PropertyDrawer
             }
             sceneNames[i] = new GUIContent(sceneName);
         }
-        if(sceneNames.Length == 0)
+        if (sceneNames.Length == 0)
         {
             sceneNames = new[] { new GUIContent("Check Your Build Settings") };
         }
-        if (string.IsNullOrEmpty(property.stringValue))
+        if (!string.IsNullOrEmpty(property.stringValue))
         {
             bool nameFound = false;
             for (int i = 0; i < sceneNames.Length; i++)
@@ -66,3 +69,4 @@ public class SceneNameDrawer : PropertyDrawer
         property.stringValue = sceneNames[sceneIndex].text;
     }
 }
+#endif
