@@ -7,21 +7,26 @@ namespace MFarm.Inventory
     public class ItemManager : MonoBehaviour
     {
         public Item itemPrefab;
+        public Item bounceItemPrefab;
         private Transform itemParent;
         private Dictionary<string, List<SceneItem>> sceneItemDict = new Dictionary<string, List<SceneItem>>();
-
+        private Transform playerTransform => FindObjectOfType<Player>().transform;
         private void OnEnable()
         {
             EventHandler.InstantiateItemInScene += OnInstantiateItemInScene;
             EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+            EventHandler.DropItemEvent += OnDropItemEvent;
         }
         private void OnDisable()
         {
             EventHandler.InstantiateItemInScene -= OnInstantiateItemInScene;
             EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+            EventHandler.DropItemEvent -= OnDropItemEvent;
         }
+
+        
 
         private void OnBeforeSceneUnloadEvent()
         {
@@ -38,6 +43,14 @@ namespace MFarm.Inventory
         {
             var item = Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
             item.Init(ID);
+        }
+        private void OnDropItemEvent(int ID, Vector3 mousePos)
+        {
+            //TODO:扔东西的效果
+            var item = Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
+            item.Init(ID);
+            var dir = (mousePos - playerTransform.position).normalized;
+            item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
         }
         /// <summary>
         /// 获取当前场景所有item

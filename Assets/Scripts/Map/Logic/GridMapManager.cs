@@ -2,14 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 namespace MFarm.Map{
     public class GridMapManager : Singleton<GridMapManager>
     {
+        private Grid currentGrid;
+        [Header("种地瓦片切换信息")]
+        public RuleTile digTile;
+        public RuleTile waterTile;
+        private Tilemap digTilemap;
+        private Tilemap waterTilemap;
+
         [Header("地图信息")]
         public List<MapData_SO> mapDataList;
         //场景名字+坐标和对应瓦片信息
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();
+
+        private Season currentSeason;
+        
+        
+        private void OnEnable()
+        {
+            EventHandler.ExecuteActionAfterAnimationEvent += OnExecuteActionAfterAnimationEvent;
+            EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+            EventHandler.GameDayEvent += OnGameDayEvent;
+        }
+        private void OnDisable()
+        {
+            EventHandler.ExecuteActionAfterAnimationEvent -= OnExecuteActionAfterAnimationEvent;
+            EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+            EventHandler.GameDayEvent -= OnGameDayEvent;
+        }
+
+        
 
         private void Start()
         {
@@ -76,8 +102,156 @@ namespace MFarm.Map{
         public TileDetails GetTileDetailsOnMousePosition(Vector3Int mouseGridPos)
         {
             string key = $"{mouseGridPos.x}x{mouseGridPos.y}y{SceneManager.GetActiveScene().name}";
-            Debug.Log(key);
             return GetTileDetails(key);
+        }
+        /// <summary>
+        /// 执行实际工具或物品功能
+        /// </summary>
+        /// <param name="mouseWorldPos"></param>
+        /// <param name="itemDetails"></param>
+        private void OnExecuteActionAfterAnimationEvent(Vector3 mouseWorldPos, ItemDetails itemDetails)
+        {
+            var mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);
+            var currentTile = GetTileDetailsOnMousePosition(mouseGridPos);
+            if(currentTile != null)
+            {
+                //WORKFLOW:物品使用实际功能
+                switch (itemDetails.itemType)
+                {
+                    case ItemType.Seed:
+                        break;
+                    case ItemType.Commodity:
+                        EventHandler.CallDropItemEvent(itemDetails.itemId, mouseWorldPos);
+                        break;
+                    case ItemType.Furniture:
+                        
+                        break;
+                    case ItemType.HoeTool:
+                        SetDigGround(currentTile);
+                        currentTile.daysSinceDug = 0;
+                        currentTile.canDig = false;
+                        currentTile.canDropItem = false;
+                        //音效
+                        break;
+                    case ItemType.ChopTool:
+                        break;
+                    case ItemType.BreakTool:
+                        break;
+                    case ItemType.ReapTool:
+                        break;
+                    case ItemType.WaterTool:
+                        SetWaterGround(currentTile);
+                        currentTile.daysSinceWatered = 0;
+                        //音效
+                        break;
+                    case ItemType.CollectTool:
+                        break;
+                    case ItemType.ReapableScenery:
+                        break;
+                    default:
+                        break;
+                }
+                UpdateTileDetails(currentTile);
+            }
+        }
+        private void OnAfterSceneLoadedEvent()
+        {
+            currentGrid = FindObjectOfType<Grid>();
+            digTilemap = GameObject.FindGameObjectWithTag("Dig").GetComponent<Tilemap>();
+            waterTilemap = GameObject.FindGameObjectWithTag("Water").GetComponent<Tilemap>();
+            RefreshMap();
+        }
+        private void OnGameDayEvent(int day, Season season)
+        {
+            currentSeason = season;
+            foreach (var tile in tileDetailsDict)
+            {
+                if(tile.Value.daysSinceWatered > -1)
+                {
+                    tile.Value.daysSinceWatered = -1;
+                }
+                if(tile.Value.daysSinceDug > -1)
+                {
+                    tile.Value.daysSinceDug++;
+                }
+                //超过指定日期坑消失
+                if(tile.Value.daysSinceDug > 5 && tile.Value.seedItemID == -1)
+                {
+                    tile.Value.daysSinceDug = -1;
+                    tile.Value.canDig = true;
+                }
+            }
+            RefreshMap();
+        }
+        /// <summary>
+        /// 显示挖坑瓦片
+        /// </summary>
+        /// <param name="tile"></param>
+        private void SetDigGround(TileDetails tile)
+        {
+            Vector3Int pos = new Vector3Int(tile.gridX, tile.gridY, 0);
+            if(digTilemap != null)
+            {
+                digTilemap.SetTile(pos, digTile);
+            }
+        }
+        /// <summary>
+        /// 显示浇水瓦片
+        /// </summary>
+        /// <param name="tile"></param>
+        private void SetWaterGround(TileDetails tile)
+        {
+            Vector3Int pos = new Vector3Int(tile.gridX, tile.gridY, 0);
+            if (waterTilemap != null)
+            {
+                Debug.Log("浇水");
+                waterTilemap.SetTile(pos, waterTile);
+            }
+        }
+        /// <summary>
+        /// 更新瓦片信息
+        /// </summary>
+        /// <param name="tileDetails"></param>
+        private void UpdateTileDetails(TileDetails tileDetails)
+        {
+            string key = $"{tileDetails.gridX}x{tileDetails.gridY}y{SceneManager.GetActiveScene().name}";
+            if (tileDetailsDict.ContainsKey(key))
+            {
+                tileDetailsDict[key] = tileDetails;
+            }
+        }
+        private void RefreshMap()
+        {
+            if (digTilemap != null)
+                digTilemap.ClearAllTiles();
+            if (waterTilemap != null)
+                waterTilemap.ClearAllTiles();
+            DisplayMap(SceneManager.GetActiveScene().name);
+        }
+        /// <summary>
+        /// 显示地图瓦片
+        /// </summary>
+        /// <param name="sceneName">场景名字</param>
+        private void DisplayMap(string sceneName)
+        {
+            foreach (var tile in tileDetailsDict)
+            {
+                var key = tile.Key;
+                var tileDetails = tile.Value;
+
+                if (key.Contains(sceneName))
+                {
+                    if(tileDetails.daysSinceDug > -1)
+                    {
+                        SetDigGround(tileDetails);
+                    }
+                    if(tileDetails.daysSinceWatered > -1)
+                    {
+                        SetWaterGround(tileDetails);
+                    }
+                    //TODO:种子
+                }
+            }
         }
     }
 }

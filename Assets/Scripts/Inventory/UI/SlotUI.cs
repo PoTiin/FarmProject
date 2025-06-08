@@ -26,7 +26,7 @@ namespace MFarm.Inventory
         private void Start()
         {
             isSelected = false;
-            if (itemDetails.itemId == 0)
+            if (itemDetails == null)
             {
                 UpdateEmptySlot();
             }
@@ -58,8 +58,10 @@ namespace MFarm.Inventory
             if (isSelected)
             {
                 isSelected = false;
+                inventoryUI.UpdateSlotHighlight(-1);
+                EventHandler.CallItemSelectedEvent(itemDetails, isSelected);
             }
-            itemDetails = new ItemDetails();
+            itemDetails = null;
             slotImage.enabled = false;
             itemAmount = 0;
             amountText.text = string.Empty;
@@ -81,7 +83,7 @@ namespace MFarm.Inventory
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (itemAmount == 0) return;
+            if (itemDetails == null) return;
             inventoryUI.dragImage.enabled = true;
             inventoryUI.dragImage.sprite = slotImage.sprite;
             inventoryUI.dragImage.SetNativeSize();

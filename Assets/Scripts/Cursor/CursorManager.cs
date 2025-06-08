@@ -51,16 +51,25 @@ public class CursorManager : MonoBehaviour
     {
         if (cursorCanvas == null) return;
         cursorImage.transform.position = Input.mousePosition;
-        if (!InteractWithUI()&&cursorEnable)
+        if (!InteractWithUI() && cursorEnable)
         {
             SetCursorImage(currentSprite);
             CheckCursorValid();
+            CheckPlayerInput();
         }
         else
         {
             SetCursorImage(normal);
         }
         
+    }
+
+    private void CheckPlayerInput()
+    {
+        if (Input.GetMouseButtonDown(0) && cursorPositionVaild)
+        {
+            EventHandler.CallMouseClickEvent(mouseWorldPos, currentItem);
+        }
     }
     
     
@@ -132,6 +141,7 @@ public class CursorManager : MonoBehaviour
         TileDetails currentTile = GridMapManager.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
         if (currentTile != null)
         {
+            //WORKFLOW:补充所有物品类型的判断
             switch (currentItem.itemType)
             {
                 case ItemType.Seed:
@@ -142,7 +152,8 @@ public class CursorManager : MonoBehaviour
                 case ItemType.Furniture:
                     break;
                 case ItemType.HoeTool:
-                    break;
+                    if (currentTile.canDig) SetCursorVaild(); else SetCursorInVaild();
+                        break;
                 case ItemType.ChopTool:
                     break;
                 case ItemType.BreakTool:
@@ -150,6 +161,7 @@ public class CursorManager : MonoBehaviour
                 case ItemType.ReapTool:
                     break;
                 case ItemType.WaterTool:
+                    if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorVaild(); else SetCursorInVaild();
                     break;
                 case ItemType.CollectTool:
                     break;
