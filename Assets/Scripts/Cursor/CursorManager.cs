@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using MFarm.CropPlant;
 using MFarm.Map;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -104,6 +105,7 @@ public class CursorManager : MonoBehaviour
                 ItemType.BreakTool => tool,
                 ItemType.ReapTool => tool,
                 ItemType.Furniture => tool,
+                ItemType.CollectTool => tool,
                 _ => normal
 
             };
@@ -141,11 +143,14 @@ public class CursorManager : MonoBehaviour
         TileDetails currentTile = GridMapManager.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
         if (currentTile != null)
         {
+            CropDetails currentCrop = CropManager.Instance.GetCropDetails(currentTile.seedItemID);
+            Crop crop = GridMapManager.Instance.GetCropObject(mouseWorldPos);
             //WORKFLOW:补充所有物品类型的判断
             switch (currentItem.itemType)
             {
                 case ItemType.Seed:
-                    break;
+                    if (currentTile.daysSinceDug > -1 && currentTile.seedItemID == -1) SetCursorVaild(); else SetCursorInVaild();
+                        break;
                 case ItemType.Commodity:
                     if (currentTile.canDropItem && currentItem.canDropped) SetCursorVaild(); else SetCursorInVaild();
                     break;
@@ -154,8 +159,6 @@ public class CursorManager : MonoBehaviour
                 case ItemType.HoeTool:
                     if (currentTile.canDig) SetCursorVaild(); else SetCursorInVaild();
                         break;
-                case ItemType.ChopTool:
-                    break;
                 case ItemType.BreakTool:
                     break;
                 case ItemType.ReapTool:
@@ -163,7 +166,28 @@ public class CursorManager : MonoBehaviour
                 case ItemType.WaterTool:
                     if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorVaild(); else SetCursorInVaild();
                     break;
+                case ItemType.ChopTool:
+                    if(crop != null)
+                    {
+                        if(crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemId)) SetCursorVaild(); else SetCursorInVaild();
+                    }
+                    else
+                    {
+                        SetCursorInVaild();
+                    }
+                        break;
                 case ItemType.CollectTool:
+                    if(currentCrop != null)
+                    {
+                        if (currentCrop.CheckToolAvailable(currentItem.itemId))
+                        {
+                            if (currentTile.growthDays >= currentCrop.TotalGrowthDays) SetCursorVaild(); else SetCursorInVaild();
+                        } else SetCursorInVaild();
+                    }
+                    else
+                    {
+                        SetCursorInVaild();
+                    }
                     break;
                 case ItemType.ReapableScenery:
                     break;

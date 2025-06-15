@@ -871,6 +871,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &606256529
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 606256531}
+  - component: {fileID: 606256530}
+  m_Layer: 0
+  m_Name: Crop Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &606256530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606256529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca6696e1953acd3428611357b3f63342, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cropData: {fileID: 11400000, guid: 199449bdf6abbd347a642ff4974fdbbc, type: 2}
+--- !u!4 &606256531
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606256529}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &631655751
 GameObject:
   m_ObjectHideFlags: 0
@@ -1424,6 +1469,30 @@ MonoBehaviour:
   - partType: 1
     partName: 2
     overrideController: {fileID: 22100000, guid: de7a452fe27775c478e5c980caf4bda5, type: 2}
+  - partType: 4
+    partName: 2
+    overrideController: {fileID: 22100000, guid: c65e4ca97c37fcf45ab9cc38eb2401a8, type: 2}
+  - partType: 5
+    partName: 2
+    overrideController: {fileID: 22100000, guid: eb21d04be8e5feb47916f3fc324db32e, type: 2}
+  - partType: 0
+    partName: 0
+    overrideController: {fileID: 22100000, guid: 31f1ea69b379180429dc215208ca50d7, type: 2}
+  - partType: 4
+    partName: 0
+    overrideController: {fileID: 22100000, guid: ad6f97d0908a35b4890e97cac664ff6d, type: 2}
+  - partType: 5
+    partName: 0
+    overrideController: {fileID: 22100000, guid: 15be3ab488915a44c83bb3cd5aa76ec8, type: 2}
+  - partType: 0
+    partName: 1
+    overrideController: {fileID: 22100000, guid: 53bbc591d8c7e0d4f94ba8809b6c8ee8, type: 2}
+  - partType: 4
+    partName: 1
+    overrideController: {fileID: 22100000, guid: 960980d7459d48d49aeb7188410a4844, type: 2}
+  - partType: 5
+    partName: 1
+    overrideController: {fileID: 22100000, guid: 6065c2f7fe762ba49a6e7507bf8e11f4, type: 2}
   - partType: 0
     partName: 3
     overrideController: {fileID: 22100000, guid: a943b606830be16428de40fd3b5788db, type: 2}
@@ -1436,9 +1505,9 @@ MonoBehaviour:
   - partType: 7
     partName: 3
     overrideController: {fileID: 22100000, guid: f0a6f0f639dacd646ab782ed44c81477, type: 2}
-  - partType: 4
-    partName: 2
-    overrideController: {fileID: 22100000, guid: c65e4ca97c37fcf45ab9cc38eb2401a8, type: 2}
+  - partType: 6
+    partName: 3
+    overrideController: {fileID: 22100000, guid: c74c8de239820a34ca0778a00cc973bc, type: 2}
 --- !u!1 &1780878122
 GameObject:
   m_ObjectHideFlags: 0
@@ -1654,3 +1723,4 @@ SceneRoots:
   - {fileID: 1967210239}
   - {fileID: 1808497659}
   - {fileID: 596168511}
+  - {fileID: 606256531}

@@ -6,7 +6,7 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tool_Axe
+  m_Name: Tool_Chop
   m_Controller: {fileID: 9100000, guid: 8ea38ca581ac54a45a1fa72145b382ac, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: 5c79e0d586ac94fd98acb1a8248deb17, type: 2}

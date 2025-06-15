@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
-namespace MFarm.Map{
+namespace MFarm.Map
+{
     public class GridMapManager : Singleton<GridMapManager>
     {
         private Grid currentGrid;
@@ -20,22 +21,24 @@ namespace MFarm.Map{
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();
 
         private Season currentSeason;
-        
-        
+
+
         private void OnEnable()
         {
             EventHandler.ExecuteActionAfterAnimationEvent += OnExecuteActionAfterAnimationEvent;
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
             EventHandler.GameDayEvent += OnGameDayEvent;
+            EventHandler.RefreshCurrentMap += RefreshMap;
         }
         private void OnDisable()
         {
             EventHandler.ExecuteActionAfterAnimationEvent -= OnExecuteActionAfterAnimationEvent;
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
             EventHandler.GameDayEvent -= OnGameDayEvent;
+            EventHandler.RefreshCurrentMap -= RefreshMap;
         }
 
-        
+
 
         private void Start()
         {
@@ -75,7 +78,7 @@ namespace MFarm.Map{
                         tileDetails.canPlaceFurniture = tileProperty.boolTypeValue;
                         break;
                 }
-                if(GetTileDetails(key) != null)
+                if (GetTileDetails(key) != null)
                 {
                     tileDetailsDict[key] = tileDetails;
                 }
@@ -113,18 +116,21 @@ namespace MFarm.Map{
         {
             var mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);
             var currentTile = GetTileDetailsOnMousePosition(mouseGridPos);
-            if(currentTile != null)
+            if (currentTile != null)
             {
+                Crop currentCrop = GetCropObject(mouseWorldPos);
                 //WORKFLOW:物品使用实际功能
                 switch (itemDetails.itemType)
                 {
                     case ItemType.Seed:
+                        EventHandler.CallPlantSeedEvent(itemDetails.itemId, currentTile);
+                        EventHandler.CallDropItemEvent(itemDetails.itemId, mouseWorldPos, itemDetails.itemType);
                         break;
                     case ItemType.Commodity:
-                        EventHandler.CallDropItemEvent(itemDetails.itemId, mouseWorldPos);
+                        EventHandler.CallDropItemEvent(itemDetails.itemId, mouseWorldPos, itemDetails.itemType);
                         break;
                     case ItemType.Furniture:
-                        
+
                         break;
                     case ItemType.HoeTool:
                         SetDigGround(currentTile);
@@ -132,8 +138,6 @@ namespace MFarm.Map{
                         currentTile.canDig = false;
                         currentTile.canDropItem = false;
                         //音效
-                        break;
-                    case ItemType.ChopTool:
                         break;
                     case ItemType.BreakTool:
                         break;
@@ -144,7 +148,13 @@ namespace MFarm.Map{
                         currentTile.daysSinceWatered = 0;
                         //音效
                         break;
+                    case ItemType.ChopTool:
+                        //执行收割方法
+                        currentCrop.ProcessToolAction(itemDetails, currentCrop.tileDetails);
+                        break;
                     case ItemType.CollectTool:
+                        //执行收割方法
+                        currentCrop.ProcessToolAction(itemDetails,currentTile);
                         break;
                     case ItemType.ReapableScenery:
                         break;
@@ -153,6 +163,24 @@ namespace MFarm.Map{
                 }
                 UpdateTileDetails(currentTile);
             }
+        }
+        /// <summary>
+        /// 通过物理方法判断鼠标点击位置的农作物
+        /// </summary>
+        /// <param name="mouseWorldPos">鼠标坐标</param>
+        /// <returns></returns>
+        public Crop GetCropObject(Vector3 mouseWorldPos)
+        {
+            Collider2D[] colliders = Physics2D.OverlapPointAll(mouseWorldPos);
+            Crop currentCrop = null;
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].GetComponent<Crop>())
+                {
+                    currentCrop = colliders[i].GetComponent<Crop>();
+                }
+            }
+            return currentCrop;
         }
         private void OnAfterSceneLoadedEvent()
         {
@@ -166,19 +194,24 @@ namespace MFarm.Map{
             currentSeason = season;
             foreach (var tile in tileDetailsDict)
             {
-                if(tile.Value.daysSinceWatered > -1)
+                if (tile.Value.daysSinceWatered > -1)
                 {
                     tile.Value.daysSinceWatered = -1;
                 }
-                if(tile.Value.daysSinceDug > -1)
+                if (tile.Value.daysSinceDug > -1)
                 {
                     tile.Value.daysSinceDug++;
                 }
                 //超过指定日期坑消失
-                if(tile.Value.daysSinceDug > 5 && tile.Value.seedItemID == -1)
+                if (tile.Value.daysSinceDug > 5 && tile.Value.seedItemID == -1)
                 {
                     tile.Value.daysSinceDug = -1;
                     tile.Value.canDig = true;
+                    tile.Value.growthDays = -1;
+                }
+                if (tile.Value.seedItemID != -1)
+                {
+                    tile.Value.growthDays++;
                 }
             }
             RefreshMap();
@@ -190,7 +223,7 @@ namespace MFarm.Map{
         private void SetDigGround(TileDetails tile)
         {
             Vector3Int pos = new Vector3Int(tile.gridX, tile.gridY, 0);
-            if(digTilemap != null)
+            if (digTilemap != null)
             {
                 digTilemap.SetTile(pos, digTile);
             }
@@ -226,6 +259,10 @@ namespace MFarm.Map{
                 digTilemap.ClearAllTiles();
             if (waterTilemap != null)
                 waterTilemap.ClearAllTiles();
+            foreach (var crop in FindObjectsOfType<Crop>())
+            {
+                Destroy(crop.gameObject);
+            }
             DisplayMap(SceneManager.GetActiveScene().name);
         }
         /// <summary>
@@ -241,15 +278,18 @@ namespace MFarm.Map{
 
                 if (key.Contains(sceneName))
                 {
-                    if(tileDetails.daysSinceDug > -1)
+                    if (tileDetails.daysSinceDug > -1)
                     {
                         SetDigGround(tileDetails);
                     }
-                    if(tileDetails.daysSinceWatered > -1)
+                    if (tileDetails.daysSinceWatered > -1)
                     {
                         SetWaterGround(tileDetails);
                     }
-                    //TODO:种子
+                    if (tileDetails.seedItemID > -1)
+                    {
+                        EventHandler.CallPlantSeedEvent(tileDetails.seedItemID, tileDetails);
+                    }
                 }
             }
         }

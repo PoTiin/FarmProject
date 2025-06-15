@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace MFarm.Inventory
 {
@@ -13,10 +14,12 @@ namespace MFarm.Inventory
         private void OnEnable()
         {
             EventHandler.DropItemEvent += OnDropItemEvent;
+            EventHandler.HarvestAtPlayerPosition += OnHarvestAtPlayerPosition;
         }
         private void OnDisable()
         {
             EventHandler.DropItemEvent -= OnDropItemEvent;
+            EventHandler.HarvestAtPlayerPosition -= OnHarvestAtPlayerPosition;
         }
 
         
@@ -25,7 +28,14 @@ namespace MFarm.Inventory
         {
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemList);
         }
-        private void OnDropItemEvent(int ID, Vector3 pos)
+        private void OnHarvestAtPlayerPosition(int ID)
+        {
+            var index = GetItemIndexInBag(ID);
+            AddItemAtIndex(ID, index, 1);
+            //¸üÐÂUI
+            EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemList);
+        }
+        private void OnDropItemEvent(int ID, Vector3 pos,ItemType itemType)
         {
             RemoveItem(ID, 1);
         }

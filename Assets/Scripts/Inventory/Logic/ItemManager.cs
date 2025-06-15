@@ -44,9 +44,10 @@ namespace MFarm.Inventory
             var item = Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
             item.Init(ID);
         }
-        private void OnDropItemEvent(int ID, Vector3 mousePos)
+        private void OnDropItemEvent(int ID, Vector3 mousePos,ItemType itemType)
         {
             //TODO:扔东西的效果
+            if (itemType == ItemType.Seed) return;
             var item = Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
             item.Init(ID);
             var dir = (mousePos - playerTransform.position).normalized;
