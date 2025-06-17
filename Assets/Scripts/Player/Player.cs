@@ -40,8 +40,10 @@ public class Player : MonoBehaviour
 
     private void OnMouseClickedEvent(Vector3 mouseWorldPos, ItemDetails itemDetails)
     {
+        if (useTool)
+            return;
         //TODO:执行动画
-        if(itemDetails.itemType != ItemType.Seed && itemDetails.itemType != ItemType.Commodity && itemDetails.itemType != ItemType.Furniture)
+        if (itemDetails.itemType != ItemType.Seed && itemDetails.itemType != ItemType.Commodity && itemDetails.itemType != ItemType.Furniture)
         {
             mouseX = mouseWorldPos.x - transform.position.x;
             mouseY = mouseWorldPos.y - (transform.position.y + 0.85f);
@@ -68,14 +70,17 @@ public class Player : MonoBehaviour
         yield return null;
         foreach (var anim in animators)
         {
-            anim.SetTrigger("useTool");
-            //人物的面朝方向
             anim.SetFloat("InputX", mouseX);
             anim.SetFloat("InputY", mouseY);
+            //人物的面朝方向
+
+            anim.SetTrigger("useTool");
+            
         }
         yield return new WaitForSeconds(0.45f);
         EventHandler.CallExecuteActionAfterAnimationEvent(mouseWorldPos, itemDetails);
         yield return new WaitForSeconds(0.25f);
+        //等待动画结束
         useTool = false;
         inputDisable = false;
     }

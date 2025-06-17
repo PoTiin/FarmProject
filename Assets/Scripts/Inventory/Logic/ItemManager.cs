@@ -41,8 +41,9 @@ namespace MFarm.Inventory
 
         private void OnInstantiateItemInScene(int ID, Vector3 pos)
         {
-            var item = Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
+            var item = Instantiate(bounceItemPrefab, pos, Quaternion.identity, itemParent);
             item.Init(ID);
+            item.GetComponent<ItemBounce>().InitBounceItem(pos, Vector3.up);
         }
         private void OnDropItemEvent(int ID, Vector3 mousePos,ItemType itemType)
         {
