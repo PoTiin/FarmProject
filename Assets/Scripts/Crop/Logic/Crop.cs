@@ -38,6 +38,7 @@ public class Crop : MonoBehaviour
                 }
             }
             //≤•∑≈¡£◊”
+            if(cropDetails.hasParticalEffect) EventHandler.CallParticleEffectEvent(cropDetails.effectType, transform.position + cropDetails.effectPos);
             //≤•∑≈…˘“Ù
         }
 

@@ -158,14 +158,14 @@ public class CursorManager : MonoBehaviour
                     break;
                 case ItemType.HoeTool:
                     if (currentTile.canDig) SetCursorVaild(); else SetCursorInVaild();
-                        break;
-                case ItemType.BreakTool:
                     break;
                 case ItemType.ReapTool:
+                    if(GridMapManager.Instance.HaveReapableItemsInRadius(mouseWorldPos,currentItem)) SetCursorVaild(); else SetCursorInVaild();
                     break;
                 case ItemType.WaterTool:
                     if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorVaild(); else SetCursorInVaild();
                     break;
+                case ItemType.BreakTool:
                 case ItemType.ChopTool:
                     if(crop != null)
                     {

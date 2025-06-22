@@ -52,7 +52,8 @@ public class CropDetails
     public bool hasAnimation;
     public bool hasParticalEffect;
     //TODO:Ãÿ–ß°¢“Ù–ß
-
+    public ParticaleEffectType effectType;
+    public Vector3 effectPos;
     public bool CheckToolAvailable(int toolID)
     {
         foreach (var tool in harvesToolItemID)

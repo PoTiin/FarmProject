@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using MFarm.CropPlant;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -19,7 +20,9 @@ namespace MFarm.Map
         public List<MapData_SO> mapDataList;
         //场景名字+坐标和对应瓦片信息
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();
-
+        private Dictionary<string, bool> firstLoadDict = new Dictionary<string, bool>();
+        //杂草列表
+        private List<ReapItem> itemInRadius;
         private Season currentSeason;
 
 
@@ -44,6 +47,7 @@ namespace MFarm.Map
         {
             foreach (var mapData in mapDataList)
             {
+                firstLoadDict.Add(mapData.sceneName, true);
                 InitTileDetailsDict(mapData);
             }
         }
@@ -139,18 +143,27 @@ namespace MFarm.Map
                         currentTile.canDropItem = false;
                         //音效
                         break;
-                    case ItemType.BreakTool:
-                        break;
+                    
                     case ItemType.ReapTool:
+                        var reapCount = 0;
+                        for (int i = 0; i < itemInRadius.Count; i++)
+                        {
+                            EventHandler.CallParticleEffectEvent(ParticaleEffectType.ReapableScenery, itemInRadius[i].transform.position + Vector3.up);
+                            itemInRadius[i].SpawnHarvestItems();
+                            Destroy(itemInRadius[i].gameObject);
+                            reapCount++;
+                            if (reapCount >= Settings.reapAmount) break;
+                        }
                         break;
                     case ItemType.WaterTool:
                         SetWaterGround(currentTile);
                         currentTile.daysSinceWatered = 0;
                         //音效
                         break;
+                    case ItemType.BreakTool:
                     case ItemType.ChopTool:
                         //执行收割方法
-                        currentCrop.ProcessToolAction(itemDetails, currentCrop.tileDetails);
+                        currentCrop?.ProcessToolAction(itemDetails, currentCrop.tileDetails);
                         break;
                     case ItemType.CollectTool:
                         //执行收割方法
@@ -182,11 +195,45 @@ namespace MFarm.Map
             }
             return currentCrop;
         }
+        /// <summary>
+        /// 返回工具范围内的杂草
+        /// </summary>
+        /// <param name="tool">工具信息</param>
+        /// <returns></returns>
+        public bool HaveReapableItemsInRadius(Vector3 mouseWorldPos, ItemDetails tool)
+        {
+            itemInRadius = new List<ReapItem>();
+            Collider2D[] colliders = new Collider2D[20];
+            Physics2D.OverlapCircleNonAlloc(mouseWorldPos, tool.itemUseRadius, colliders);
+            Debug.Log("colliders.Length:" + colliders.Length);
+            Debug.Log("Input.mousePosition :" + Input.mousePosition);
+            if (colliders.Length > 0)
+            {
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i] != null)
+                    {
+                        if (colliders[i].GetComponent<ReapItem>())
+                        {
+                            var item = colliders[i].GetComponent<ReapItem>();
+                            itemInRadius.Add(item);
+                        }
+                    }
+                }
+            }
+            return itemInRadius.Count > 0;
+        }
         private void OnAfterSceneLoadedEvent()
         {
             currentGrid = FindObjectOfType<Grid>();
             digTilemap = GameObject.FindGameObjectWithTag("Dig").GetComponent<Tilemap>();
             waterTilemap = GameObject.FindGameObjectWithTag("Water").GetComponent<Tilemap>();
+            //预先生成农作物
+            if (firstLoadDict[SceneManager.GetActiveScene().name])
+            {
+                EventHandler.CallGenerateCropEvent();
+                firstLoadDict[SceneManager.GetActiveScene().name] = false;
+            }
             RefreshMap();
         }
         private void OnGameDayEvent(int day, Season season)
@@ -245,12 +292,16 @@ namespace MFarm.Map
         /// 更新瓦片信息
         /// </summary>
         /// <param name="tileDetails"></param>
-        private void UpdateTileDetails(TileDetails tileDetails)
+        public void UpdateTileDetails(TileDetails tileDetails)
         {
             string key = $"{tileDetails.gridX}x{tileDetails.gridY}y{SceneManager.GetActiveScene().name}";
             if (tileDetailsDict.ContainsKey(key))
             {
                 tileDetailsDict[key] = tileDetails;
+            }
+            else
+            {
+                tileDetailsDict.Add(key, tileDetails);
             }
         }
         private void RefreshMap()

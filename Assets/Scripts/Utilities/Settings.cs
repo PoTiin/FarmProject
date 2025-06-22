@@ -18,4 +18,7 @@ public class Settings
     public const int seasonHold = 3;
 
     public const float fadeDuration = 1.5f;
+
+    //割草数量限制
+    public const int reapAmount = 2;
 }

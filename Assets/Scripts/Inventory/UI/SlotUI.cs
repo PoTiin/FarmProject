@@ -22,7 +22,7 @@ namespace MFarm.Inventory
         //物品信息
         public ItemDetails itemDetails;
         public int itemAmount;
-        private InventoryUI inventoryUI => GetComponentInParent<InventoryUI>();
+        public InventoryUI inventoryUI => GetComponentInParent<InventoryUI>();
         private void Start()
         {
             isSelected = false;
