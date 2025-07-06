@@ -1,22 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeManager : MonoBehaviour
+public class TimeManager : Singleton<TimeManager>
 {
     private int gameSecond, gameMinute, gameHour, gameDay, gameMonth, gameYear;
     private Season gameSeason = Season.´ºÌì;
     private int monthInSeason;
     public bool gameClockPause;
     private float tikTime;
-    private void Awake()
+    public TimeSpan GameTime => new TimeSpan(gameHour, gameMinute, gameSecond);
+    protected override void Awake()
     {
+        base.Awake();
         NewGameTime();
     }
+    private void OnEnable()
+    {
+        EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
+        EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+    }
+
+    
+
     private void Start()
     {
         EventHandler.CallGameDataEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
-        EventHandler.CallGameMinuteEvent(gameMinute, gameHour);
+        EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
     }
     private void Update()
     {
@@ -29,9 +46,9 @@ public class TimeManager : MonoBehaviour
                 UpdateGameTime();
             }
         }
-        if (Input.GetKey(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T))
         {
-            for(int i = 0; i < 60; i++)
+            for(int i = 0; i < 60 * 10; i++)
             {
                 UpdateGameTime();
             }
@@ -42,6 +59,14 @@ public class TimeManager : MonoBehaviour
             EventHandler.CallGameDayEvent(gameDay, gameSeason);
             EventHandler.CallGameDataEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
         }
+    }
+    private void OnBeforeSceneUnloadEvent()
+    {
+        gameClockPause = true;
+    }
+    private void OnAfterSceneLoadedEvent()
+    {
+        gameClockPause = false;
     }
     private void NewGameTime()
     {
@@ -100,7 +125,7 @@ public class TimeManager : MonoBehaviour
                 }
                 EventHandler.CallGameDataEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
             }
-            EventHandler.CallGameMinuteEvent(gameMinute, gameHour);
+            EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
         }
     }
 

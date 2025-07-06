@@ -21,4 +21,15 @@ public class Settings
 
     //割草数量限制
     public const int reapAmount = 2;
+
+    //NPC网格移动
+    public const float gridCellSize = 1;
+
+    public const float gridCellDiagonalSize = 1.41f;
+
+    public const float pixelSize = 0.05f;//20*20 占 1unit
+
+    public const float animationBreakTime = 5f;
+
+    public const int maxGridSize = 9999;
 }

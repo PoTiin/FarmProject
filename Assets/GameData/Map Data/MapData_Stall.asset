@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7f5979ce4a3f064081383330a856a0b, type: 3}
+  m_Name: MapData_Stall
+  m_EditorClassIdentifier: 
+  sceneName: 03.Stall
+  gridWidth: 44
+  gridHeight: 33
+  originX: -8
+  originY: -25
+  titleProperties:
+  - tileCoordinate: {x: 8, y: -7}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 8, y: -6}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 9, y: -7}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 9, y: -6}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 10, y: -7}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 10, y: -6}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 11, y: -7}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 11, y: -6}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 12, y: -7}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 12, y: -6}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 13, y: -7}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 13, y: -6}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 14, y: -7}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 14, y: -6}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 14, y: -5}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 14, y: -4}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 15, y: -8}
+    gridType: 3
+    boolTypeValue: 1
