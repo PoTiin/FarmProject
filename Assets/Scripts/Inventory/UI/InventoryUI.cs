@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MFarm.Inventory
 {
     public class InventoryUI : MonoBehaviour
     {
+
+        public ItemToolTip itemTooltip;
+        [Header("拖拽图片")]
+        public Image dragImage;
+
         [Header("玩家背包UI")]
         [SerializeField] private GameObject bagUI;
         private bool bagOpened;
@@ -13,13 +19,21 @@ namespace MFarm.Inventory
         private void OnEnable()
         {
             EventHandler.UpdateInventoryUI += OnUpdateInventoryUI;
+            EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         }
 
 
         private void OnDisable()
         {
             EventHandler.UpdateInventoryUI -= OnUpdateInventoryUI;
+            EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         }
+
+        private void OnBeforeSceneUnloadEvent()
+        {
+            UpdateSlotHighlight(-1);
+        }
+
         private void Start()
         {
             //给每个格子一个序号
@@ -85,6 +99,7 @@ namespace MFarm.Inventory
             }
 
         }
+        
 
     }
 }
