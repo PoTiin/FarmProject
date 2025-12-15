@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MFarm.Dialogue;
 using UnityEngine;
 
 public static class EventHandler
@@ -104,5 +105,38 @@ public static class EventHandler
     public static void CallGenerateCropEvent()
     {
         GenerateCropEvent?.Invoke();
+    }
+    public static event Action<DialoguePiece> ShowDialogueEvent;
+    public static void CallShowDialogueEvent(DialoguePiece piece)
+    {
+        ShowDialogueEvent?.Invoke(piece);
+    }
+
+    public static event Action<SlotType, InventoryBag_SO> BaseBagOpenEvent;
+    public static void CallBaseBagOpenEvent(SlotType slotType, InventoryBag_SO inventoryBag_SO)
+    {
+        BaseBagOpenEvent?.Invoke(slotType, inventoryBag_SO);
+    }
+    public static event Action<SlotType, InventoryBag_SO> BaseBagCloseEvent;
+    public static void CallBaseBagCloseEvent(SlotType slotType, InventoryBag_SO inventoryBag_SO)
+    {
+        BaseBagCloseEvent?.Invoke(slotType, inventoryBag_SO);
+    }
+
+    public static event Action<GameState> UpdateGameStateEvent;
+    public static void CallUpdateGameStateEvent(GameState gameState)
+    {
+        UpdateGameStateEvent?.Invoke(gameState);
+    }
+    public static event Action<ItemDetails,bool> ShowTradeUI;
+    public static void CallShowTradeUI(ItemDetails itemDetails,bool isSell)
+    {
+        ShowTradeUI?.Invoke(itemDetails, isSell);
+    }
+
+    public static event Action<int,Vector3> BuildFurnitureEvent;
+    public static void CallBuildFurnitureEvent(int ID,Vector3 pos)
+    {
+        BuildFurnitureEvent?.Invoke(ID, pos);
     }
 }

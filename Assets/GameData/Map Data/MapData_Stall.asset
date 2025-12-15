@@ -33,19 +33,10 @@ MonoBehaviour:
   - tileCoordinate: {x: 10, y: -7}
     gridType: 3
     boolTypeValue: 1
-  - tileCoordinate: {x: 10, y: -6}
-    gridType: 3
-    boolTypeValue: 1
   - tileCoordinate: {x: 11, y: -7}
     gridType: 3
     boolTypeValue: 1
-  - tileCoordinate: {x: 11, y: -6}
-    gridType: 3
-    boolTypeValue: 1
   - tileCoordinate: {x: 12, y: -7}
-    gridType: 3
-    boolTypeValue: 1
-  - tileCoordinate: {x: 12, y: -6}
     gridType: 3
     boolTypeValue: 1
   - tileCoordinate: {x: 13, y: -7}

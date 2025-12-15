@@ -21,13 +21,13 @@ MonoBehaviour:
     targetScene: 01.Field
     targetGridPosition: {x: -8, y: -5}
     clipAtStop: {fileID: 7400000, guid: db32c3897ab64466f86a8993b8e48f9e, type: 2}
-    interactable: 0
+    interactable: 1
   - hour: 10
     minute: 0
     day: 0
     priority: 0
     season: 0
     targetScene: 01.Field
-    targetGridPosition: {x: 1, y: -8}
+    targetGridPosition: {x: 4, y: -9}
     clipAtStop: {fileID: 7400000, guid: 54d560542c0284c169c56cddc7145ac6, type: 2}
     interactable: 0

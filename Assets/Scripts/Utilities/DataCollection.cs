@@ -58,6 +58,14 @@ public class SceneItem
     public int itemID;
     public SerializableVector3 position;
 }
+
+[System.Serializable]
+public class SceneFurniture
+{
+    //TODO:更多属性信息
+    public int itemID;
+    public SerializableVector3 position;
+}
 [System.Serializable]
 public class TileProperty
 {
