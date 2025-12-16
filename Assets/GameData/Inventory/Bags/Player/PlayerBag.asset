@@ -14,49 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemList:
   - itemID: 1012
-    itemAmount: 1
+    itemAmount: 99
   - itemID: 1013
-    itemAmount: 1
-  - itemID: 1004
-    itemAmount: 4
+    itemAmount: 99
+  - itemID: 1002
+    itemAmount: 99
   - itemID: 1027
-    itemAmount: 1
+    itemAmount: 99
   - itemID: 1003
-    itemAmount: 4
+    itemAmount: 99
   - itemID: 1022
-    itemAmount: 1
+    itemAmount: 99
   - itemID: 1021
-    itemAmount: 3
+    itemAmount: 99
   - itemID: 1015
-    itemAmount: 18
-  - itemID: 0
-    itemAmount: 0
+    itemAmount: 99
+  - itemID: 1029
+    itemAmount: 97
   - itemID: 1028
-    itemAmount: 5
+    itemAmount: 99
   - itemID: 1009
-    itemAmount: 9
+    itemAmount: 99
   - itemID: 1010
-    itemAmount: 60
+    itemAmount: 79
   - itemID: 1006
-    itemAmount: 3
+    itemAmount: 99
   - itemID: 1011
     itemAmount: 79
   - itemID: 1011
-    itemAmount: 3
+    itemAmount: 99
   - itemID: 1001
-    itemAmount: 1
+    itemAmount: 99
   - itemID: 1002
-    itemAmount: 5
+    itemAmount: 99
   - itemID: 1017
-    itemAmount: 17
-  - itemID: 1029
-    itemAmount: 10
+    itemAmount: 99
+  - itemID: 0
+    itemAmount: 0
   - itemID: 0
     itemAmount: 0
   - itemID: 0
     itemAmount: 0
   - itemID: 1014
-    itemAmount: 1
+    itemAmount: 99
   - itemID: 0
     itemAmount: 0
   - itemID: 0
