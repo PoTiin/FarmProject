@@ -10,6 +10,8 @@ public class TimeManager : Singleton<TimeManager>
     private int monthInSeason;
     public bool gameClockPause;
     private float tikTime;
+
+    private float timeDifference;
     public TimeSpan GameTime => new TimeSpan(gameHour, gameMinute, gameSecond);
     protected override void Awake()
     {
@@ -34,6 +36,7 @@ public class TimeManager : Singleton<TimeManager>
     {
         EventHandler.CallGameDataEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
         EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
+        EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
     }
     private void Update()
     {
@@ -133,7 +136,27 @@ public class TimeManager : Singleton<TimeManager>
                 EventHandler.CallGameDataEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
             }
             EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
+
+            //ÇÐ»»µÆ¹â
+            EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
         }
+
+    }
+
+    private LightShift GetCurrentLightShift()
+    {
+        if(GameTime >= Settings.morningTime && GameTime < Settings.nightTime)
+        {
+            timeDifference = (float)(GameTime - Settings.morningTime).TotalMinutes;
+            return LightShift.Morning;
+        }
+        if(GameTime < Settings.morningTime || GameTime >= Settings.nightTime)
+        {
+            timeDifference = Mathf.Abs((float)(GameTime - Settings.nightTime).TotalMinutes);
+            Debug.Log(timeDifference);
+            return LightShift.Night;
+        }
+        return LightShift.Morning;
     }
 
 }
