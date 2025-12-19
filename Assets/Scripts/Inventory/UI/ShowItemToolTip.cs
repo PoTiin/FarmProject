@@ -16,8 +16,18 @@ namespace MFarm.Inventory
             {
                 inventoryUI.itemTooltip.gameObject.SetActive(true);
                 inventoryUI.itemTooltip.SetUpToolTip(slotUI.itemDetails, slotUI.slotType);
+                inventoryUI.itemTooltip.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0);
                 inventoryUI.itemTooltip.transform.position = transform.position + Vector3.up * 60;
 
+                if(slotUI.itemDetails.itemType == ItemType.Furniture)
+                {
+                    inventoryUI.itemTooltip.resourcePanel.SetActive(true);
+                    inventoryUI.itemTooltip.SetupResourcePanel(slotUI.itemDetails.itemId);
+                }
+                else
+                {
+                    inventoryUI.itemTooltip.resourcePanel.SetActive(false);
+                }
             }
             else
             {

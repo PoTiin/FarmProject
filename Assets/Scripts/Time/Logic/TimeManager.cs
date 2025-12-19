@@ -46,9 +46,16 @@ public class TimeManager : Singleton<TimeManager>
                 UpdateGameTime();
             }
         }
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.T))
         {
-            for(int i = 0; i < 60 * 10; i++)
+            for (int i = 0; i < 60 * 10; i++)
+            {
+                UpdateGameTime();
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            for(int i = 0; i < 60; i++)
             {
                 UpdateGameTime();
             }

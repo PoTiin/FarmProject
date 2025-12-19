@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MFarm.CropPlant;
+using MFarm.Inventory;
 using MFarm.Map;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,6 +13,8 @@ public class CursorManager : MonoBehaviour
     private Sprite currentSprite;
     private Image cursorImage;
     private RectTransform cursorCanvas;
+
+    private Image buildImage;
 
     private Camera mainCamera;
     private Grid currentGrid;
@@ -45,6 +48,9 @@ public class CursorManager : MonoBehaviour
     {
         cursorCanvas = GameObject.FindGameObjectWithTag("CursorCanvas").GetComponent<RectTransform>();
         cursorImage = cursorCanvas.Find("Cursor Image").GetComponent<Image>();
+        //拿到建造图标
+        buildImage = cursorCanvas.Find("Build Cursor").GetComponent<Image>();
+        buildImage.gameObject.SetActive(false);
         currentSprite = normal;
         SetCursorImage(normal);
     }
@@ -61,6 +67,7 @@ public class CursorManager : MonoBehaviour
         else
         {
             SetCursorImage(normal);
+            buildImage.gameObject.SetActive(false);
         }
         
     }
@@ -90,6 +97,7 @@ public class CursorManager : MonoBehaviour
             currentItem = null;
             cursorEnable = false;
             currentSprite = normal;
+            buildImage.gameObject.SetActive(false);
         }
         else
         {
@@ -110,6 +118,13 @@ public class CursorManager : MonoBehaviour
 
             };
             cursorEnable = true;
+
+            if(itemDetails.itemType == ItemType.Furniture)
+            {
+                buildImage.gameObject.SetActive(true);
+                buildImage.sprite = itemDetails.itemOnWorldSprite;
+                buildImage.SetNativeSize();
+            }
         }
             
     }
@@ -123,11 +138,13 @@ public class CursorManager : MonoBehaviour
     {
         cursorPositionVaild = true;
         cursorImage.color = new Color(1, 1, 1, 1);
+        buildImage.color = new Color(1, 1, 1, 0.5f);
     }
     private void SetCursorInVaild()
     {
         cursorPositionVaild = false;
         cursorImage.color = new Color(1, 0, 0, 0.4f);
+        buildImage.color = new Color(1, 0, 0, 0.5f);
     }
     #endregion
     private void CheckCursorValid()
@@ -135,6 +152,11 @@ public class CursorManager : MonoBehaviour
         mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
         mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);
         var playerGridPos = currentGrid.WorldToCell(playerTransform.position);
+
+        //建造图片跟随移动
+        buildImage.rectTransform.position = Input.mousePosition;
+
+
         if(Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadius || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadius)
         {
             SetCursorInVaild();
@@ -155,6 +177,8 @@ public class CursorManager : MonoBehaviour
                     if (currentTile.canDropItem && currentItem.canDropped) SetCursorVaild(); else SetCursorInVaild();
                     break;
                 case ItemType.Furniture:
+                    if (currentTile.canPlaceFurniture && InventoryManager.Instance.CheckStock(currentItem.itemId)) SetCursorVaild(); else SetCursorInVaild();
+                    
                     break;
                 case ItemType.HoeTool:
                     if (currentTile.canDig) SetCursorVaild(); else SetCursorInVaild();

@@ -18,16 +18,16 @@ MonoBehaviour:
     day: 0
     priority: 0
     season: 0
-    targetScene: 01.Field
-    targetGridPosition: {x: -8, y: -5}
+    targetScene: 03.Stall
+    targetGridPosition: {x: 11, y: -6}
     clipAtStop: {fileID: 0}
-    interactable: 0
-  - hour: 10
-    minute: 0
+    interactable: 1
+  - hour: 7
+    minute: 1
     day: 0
     priority: 0
     season: 0
     targetScene: 01.Field
-    targetGridPosition: {x: 1, y: -8}
+    targetGridPosition: {x: 4, y: -9}
     clipAtStop: {fileID: 0}
-    interactable: 0
+    interactable: 1

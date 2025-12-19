@@ -43,6 +43,8 @@ public class NPCMovement : MonoBehaviour
     private bool npcMove;
 
     private bool sceneLoaded;
+
+    public bool interactable;
     private float animationBreakTime;
 
     private bool canPlayStopAnimation;
@@ -145,8 +147,6 @@ public class NPCMovement : MonoBehaviour
 
     private void CheckVisiable()
     {
-        Debug.Log(currentScene);
-        Debug.Log(SceneManager.GetActiveScene().name);
         if (currentScene == SceneManager.GetActiveScene().name)
         {
             SetActiveInScene();
@@ -239,10 +239,12 @@ public class NPCMovement : MonoBehaviour
         targetScene = schedule.targetScene;
         targetGridPosition = (Vector3Int)schedule.targetGridPosition;
         stopAnimationClip = schedule.clipAtStop;
+        this.interactable = schedule.interactable;
         if (schedule.targetScene == currentScene)
         {
             AStar.Instance.BuildPath(schedule.targetScene, (Vector2Int)currentGridPosition, schedule.targetGridPosition, movementSteps);
-        }else if(schedule.targetScene != currentScene)
+        }
+        else if(schedule.targetScene != currentScene)
         {
             SceneRoute sceneRoute = NPCManager.Instance.GetSceneRoute(currentScene, schedule.targetScene);
             if(sceneRoute != null)
@@ -272,7 +274,6 @@ public class NPCMovement : MonoBehaviour
                 }
             }
         }
-        //TODO:跨场景移动
         if (movementSteps.Count > 1)
         {
             //更新每一步对应的时间戳
@@ -282,7 +283,8 @@ public class NPCMovement : MonoBehaviour
 
     private void UpdateTimeOnPath()
     {
-        MovementStep previousStep = null;
+        MovementStep previousStep = new MovementStep();
+        previousStep.gridCoordinate = (Vector2Int)currentGridPosition;
         TimeSpan currentGameTime = GameTime;
         TimeSpan gridMovementStepTime = new TimeSpan(0, 0, (int)(Settings.gridCellSize / normalSpeed / Settings.secondThreshold));
         TimeSpan gridMovementDiagonalStepTime = new TimeSpan(0, 0, (int)(Settings.gridCellDiagonalSize / normalSpeed / Settings.secondThreshold));
@@ -290,9 +292,6 @@ public class NPCMovement : MonoBehaviour
         {
             if (previousStep == null)
                 previousStep = step;
-            step.hour = currentGameTime.Hours;
-            step.minute = currentGameTime.Minutes;
-            step.second = currentGameTime.Seconds;
             if (MoveInDiagonal(step, previousStep))
             {
                 currentGameTime = currentGameTime.Add(gridMovementDiagonalStepTime);
@@ -301,6 +300,10 @@ public class NPCMovement : MonoBehaviour
             {
                 currentGameTime = currentGameTime.Add(gridMovementStepTime);
             }
+            step.hour = currentGameTime.Hours;
+            step.minute = currentGameTime.Minutes;
+            step.second = currentGameTime.Seconds;
+            
             previousStep = step;
 
 
