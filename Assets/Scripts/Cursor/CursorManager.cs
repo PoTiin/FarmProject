@@ -193,7 +193,7 @@ public class CursorManager : MonoBehaviour
                 case ItemType.ChopTool:
                     if(crop != null)
                     {
-                        if(crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemId)) SetCursorVaild(); else SetCursorInVaild();
+                        if (crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemId)) SetCursorVaild(); else SetCursorInVaild();
                     }
                     else
                     {
