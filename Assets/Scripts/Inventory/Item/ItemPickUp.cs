@@ -12,8 +12,9 @@ namespace MFarm.Inventory
             {
                 if (item.itemDetails.canPickedUp)
                 {
-                    //ʰȡ
+                    //
                     InventoryManager.Instance.AddItem(item, true);
+                    EventHandler.CallPlaySoundEvent(SoundName.Pickup);
                 }
                 
             }

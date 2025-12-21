@@ -129,6 +129,7 @@ namespace MFarm.Map
                     case ItemType.Seed:
                         EventHandler.CallPlantSeedEvent(itemDetails.itemId, currentTile);
                         EventHandler.CallDropItemEvent(itemDetails.itemId, mouseWorldPos, itemDetails.itemType);
+                        EventHandler.CallPlaySoundEvent(SoundName.Plant);
                         break;
                     case ItemType.Commodity:
                         EventHandler.CallDropItemEvent(itemDetails.itemId, mouseWorldPos, itemDetails.itemType);
@@ -146,6 +147,7 @@ namespace MFarm.Map
                         currentTile.canDig = false;
                         currentTile.canDropItem = false;
                         //“Ù–ß
+                        EventHandler.CallPlaySoundEvent(SoundName.Hoe);
                         break;
                     
                     case ItemType.ReapTool:
@@ -158,11 +160,13 @@ namespace MFarm.Map
                             reapCount++;
                             if (reapCount >= Settings.reapAmount) break;
                         }
+                        EventHandler.CallPlaySoundEvent(SoundName.Reap);
                         break;
                     case ItemType.WaterTool:
                         SetWaterGround(currentTile);
                         currentTile.daysSinceWatered = 0;
                         //“Ù–ß
+                        EventHandler.CallPlaySoundEvent(SoundName.Water);
                         break;
                     case ItemType.BreakTool:
                     case ItemType.ChopTool:
@@ -209,8 +213,6 @@ namespace MFarm.Map
             itemInRadius = new List<ReapItem>();
             Collider2D[] colliders = new Collider2D[20];
             Physics2D.OverlapCircleNonAlloc(mouseWorldPos, tool.itemUseRadius, colliders);
-            Debug.Log("colliders.Length:" + colliders.Length);
-            Debug.Log("Input.mousePosition :" + Input.mousePosition);
             if (colliders.Length > 0)
             {
                 for (int i = 0; i < colliders.Length; i++)

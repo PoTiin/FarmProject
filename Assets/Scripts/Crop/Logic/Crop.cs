@@ -20,7 +20,7 @@ public class Crop : MonoBehaviour
         int requireActionCount = cropDetails.GetTotalRequireCount(tool.itemId);
         if (requireActionCount == -1) return;
         anim = GetComponentInChildren<Animator>();
-
+        Debug.Log(cropDetails.soundEffect);
         //点击计数器
         if (harvestActionCount < requireActionCount)
         {
@@ -40,6 +40,11 @@ public class Crop : MonoBehaviour
             //播放粒子
             if(cropDetails.hasParticalEffect) EventHandler.CallParticleEffectEvent(cropDetails.effectType, transform.position + cropDetails.effectPos);
             //播放声音
+            
+            if(cropDetails.soundEffect != SoundName.none)
+            {
+                EventHandler.CallPlaySoundEvent(cropDetails.soundEffect);
+            }
         }
 
         if (harvestActionCount >= requireActionCount)
@@ -59,6 +64,7 @@ public class Crop : MonoBehaviour
                 {
                     anim.SetTrigger("FallingLeft");
                 }
+                EventHandler.CallPlaySoundEvent(SoundName.TreeFalling);
                 StartCoroutine(HavestAfterAnimation());
             }
         }
