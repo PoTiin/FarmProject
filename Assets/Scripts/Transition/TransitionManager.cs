@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -10,7 +11,7 @@ namespace MFarm.Transition
         [SceneName]
         public string startSceneName = string.Empty;
         private CanvasGroup fadeCanvasGroup;
-        private bool isFade;
+        private bool isFade = false;
 
         private void OnEnable()
         {
@@ -31,7 +32,7 @@ namespace MFarm.Transition
 
         private IEnumerator Start()
         {
-            fadeCanvasGroup = FindObjectOfType<CanvasGroup>();
+            fadeCanvasGroup = FindObjectsOfType<CanvasGroup>().ToList().Find(f => f.name == "Fade Panel");
             yield return StartCoroutine(LoadSceneSetActive(startSceneName));
             EventHandler.CallAfterSceneLoadedEvent();
         }
@@ -72,6 +73,7 @@ namespace MFarm.Transition
         /// <returns></returns>
         private IEnumerator Fade(float targetAlpha)
         {
+            Debug.Log("Ω•»Î");
             isFade = true;
             fadeCanvasGroup.blocksRaycasts = true;
             float speed = Mathf.Abs(fadeCanvasGroup.alpha - targetAlpha) / Settings.fadeDuration;
@@ -80,7 +82,7 @@ namespace MFarm.Transition
                 fadeCanvasGroup.alpha = Mathf.MoveTowards(fadeCanvasGroup.alpha, targetAlpha, speed * Time.deltaTime);
                 yield return null;
             }
-            //fadeCanvasGroup.alpha = targetAlpha;
+            fadeCanvasGroup.alpha = targetAlpha;
             fadeCanvasGroup.blocksRaycasts = false;
             isFade = false;
 

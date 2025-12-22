@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: MapData_Start
   m_EditorClassIdentifier: 
   sceneName: 00.Start
-  gridWidth: 20
-  gridHeight: 25
-  originX: -9
-  originY: -25
+  gridWidth: 40
+  gridHeight: 26
+  originX: -10
+  originY: -26
   titleProperties:
   - tileCoordinate: {x: -9, y: -19}
     gridType: 3

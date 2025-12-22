@@ -12,4 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe808cfe46c0e2f408066cbbbab32a6e, type: 3}
   m_Name: Gril01 Schedule
   m_EditorClassIdentifier: 
-  scheduleList: []
+  scheduleList:
+  - hour: 7
+    minute: 1
+    day: 0
+    priority: 0
+    season: 0
+    targetScene: 01.Field
+    targetGridPosition: {x: 4, y: -9}
+    clipAtStop: {fileID: 0}
+    interactable: 0

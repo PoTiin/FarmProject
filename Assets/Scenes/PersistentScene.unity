@@ -4576,8 +4576,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53e3bc3b6b8ef84b92db8543e65ef2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPos: {x: -18, y: -16}
-  finishPos: {x: 12, y: 10}
+  startPos: {x: 9, y: -12}
+  finishPos: {x: 11, y: -2}
   displayMap: {fileID: 186962782}
   displayTile: {fileID: 11400000, guid: 0ff2a4c443107304390f40f19b8993e9, type: 2}
   displayStartAndFinish: 0
@@ -4585,7 +4585,7 @@ MonoBehaviour:
   npcMovement: {fileID: 240622898}
   moveNPC: 0
   targetScene: 00.Start
-  targetPos: {x: 9, y: -14}
+  targetPos: {x: 11, y: -2}
   stopClip: {fileID: 0}
 --- !u!114 &1605476963
 MonoBehaviour:
@@ -5349,7 +5349,7 @@ Animator:
   m_GameObject: {fileID: 1949119071}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 60cf7489872142f4b990e20a9084b1d4, type: 2}
+  m_Controller: {fileID: 22100000, guid: a4dc3c8304d39214f89456de20134437, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

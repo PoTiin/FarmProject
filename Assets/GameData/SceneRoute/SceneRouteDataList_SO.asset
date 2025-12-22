@@ -16,12 +16,21 @@ MonoBehaviour:
   - fromSceneName: 00.Start
     gotoSceneName: 01.Field
     scenePathList:
+    - sceneName: 01.Field
+      fromGridCell: {x: 26, y: -2}
+      gotoGridCell: {x: 99999, y: 99999}
     - sceneName: 00.Start
       fromGridCell: {x: 99999, y: 99999}
-      gotoGridCell: {x: 9, y: -18}
-    - sceneName: 01.Field
-      fromGridCell: {x: 9, y: -18}
+      gotoGridCell: {x: 11, y: -2}
+  - fromSceneName: 01.Field
+    gotoSceneName: 00.Start
+    scenePathList:
+    - sceneName: 00.Start
+      fromGridCell: {x: 11, y: -2}
       gotoGridCell: {x: 99999, y: 99999}
+    - sceneName: 01.Field
+      fromGridCell: {x: 99999, y: 99999}
+      gotoGridCell: {x: 26, y: -2}
   - fromSceneName: 01.Field
     gotoSceneName: 02.Home
     scenePathList:
