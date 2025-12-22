@@ -64,7 +64,12 @@ public class NPCMovement : MonoBehaviour
         movementSteps = new Stack<MovementStep>();
 
         animOverride = new AnimatorOverrideController(anim.runtimeAnimatorController);
-        anim.runtimeAnimatorController = animOverride;
+        //RuntimeAnimatorController controller = anim.runtimeAnimatorController;
+        //if (controller is AnimatorOverrideController)
+        //{
+        //    animOverride = controller as AnimatorOverrideController;
+        //}
+        //anim.runtimeAnimatorController = animOverride;
         scheduleSet = new SortedSet<ScheduleDetails>();
         foreach (var schedule in scheduleData.scheduleList)
         {
@@ -88,7 +93,7 @@ public class NPCMovement : MonoBehaviour
         EventHandler.GameMinuteEvent -= OnGameMinuteEvent;
     }
 
-    
+
 
     private void Update()
     {
@@ -103,13 +108,13 @@ public class NPCMovement : MonoBehaviour
         if (sceneLoaded)
             Movement();
     }
-    private void OnGameMinuteEvent(int minute, int hour,int day,Season season)
+    private void OnGameMinuteEvent(int minute, int hour, int day, Season season)
     {
         int time = (hour * 100) + minute;
         ScheduleDetails matchSchedule = null;
         foreach (var schedule in scheduleSet)
         {
-            if(schedule.Time == time)
+            if (schedule.Time == time)
             {
                 if (schedule.day != day && schedule.day != 0)
                     continue;
@@ -117,12 +122,12 @@ public class NPCMovement : MonoBehaviour
                     continue;
                 matchSchedule = schedule;
             }
-            else if(schedule.Time > time)
+            else if (schedule.Time > time)
             {
                 break;
             }
         }
-        if(matchSchedule != null)
+        if (matchSchedule != null)
         {
             BuildPath(matchSchedule);
         }
@@ -132,7 +137,7 @@ public class NPCMovement : MonoBehaviour
         sceneLoaded = false;
     }
 
-    
+
     private void OnAfterSceneLoadedEvent()
     {
         grid = FindObjectOfType<Grid>();
@@ -189,17 +194,17 @@ public class NPCMovement : MonoBehaviour
         }
     }
 
-    private void MoveToGridPosition(Vector3Int gridPos,TimeSpan stepTime)
+    private void MoveToGridPosition(Vector3Int gridPos, TimeSpan stepTime)
     {
         StartCoroutine(MoveRoutine(gridPos, stepTime));
     }
 
-    private IEnumerator MoveRoutine(Vector3Int gridPos,TimeSpan stepTime)
+    private IEnumerator MoveRoutine(Vector3Int gridPos, TimeSpan stepTime)
     {
         npcMove = true;
         nextWorldPosition = GetWorldPosition(gridPos);
         //还有时间用来移动
-        if(stepTime > GameTime)
+        if (stepTime > GameTime)
         {
             //用来移动的时间差，以秒为单位
             float timeToMove = (float)(stepTime.TotalSeconds - GameTime.TotalSeconds);
@@ -208,9 +213,9 @@ public class NPCMovement : MonoBehaviour
 
             float speed = Mathf.Max(minSpeed, (distance / timeToMove / Settings.secondThreshold));
 
-            if(speed <= maxSpeed)
+            if (speed <= maxSpeed)
             {
-                while(Vector3.Distance(transform.position,nextWorldPosition) > Settings.pixelSize)
+                while (Vector3.Distance(transform.position, nextWorldPosition) > Settings.pixelSize)
                 {
                     dir = (nextWorldPosition - transform.position).normalized;
                     Vector2 posOffset = new Vector2(dir.x * speed * Time.fixedDeltaTime, dir.y * speed * Time.fixedDeltaTime);
@@ -244,16 +249,16 @@ public class NPCMovement : MonoBehaviour
         {
             AStar.Instance.BuildPath(schedule.targetScene, (Vector2Int)currentGridPosition, schedule.targetGridPosition, movementSteps);
         }
-        else if(schedule.targetScene != currentScene)
+        else if (schedule.targetScene != currentScene)
         {
             SceneRoute sceneRoute = NPCManager.Instance.GetSceneRoute(currentScene, schedule.targetScene);
-            if(sceneRoute != null)
+            if (sceneRoute != null)
             {
                 for (int i = 0; i < sceneRoute.scenePathList.Count; i++)
                 {
                     Vector2Int fromPos, gotoPos;
                     ScenePath path = sceneRoute.scenePathList[i];
-                    if(path.fromGridCell.x >= Settings.maxGridSize || path.fromGridCell.y >= Settings.maxGridSize)
+                    if (path.fromGridCell.x >= Settings.maxGridSize || path.fromGridCell.y >= Settings.maxGridSize)
                     {
                         fromPos = (Vector2Int)currentGridPosition;
                     }
@@ -303,7 +308,7 @@ public class NPCMovement : MonoBehaviour
             step.hour = currentGameTime.Hours;
             step.minute = currentGameTime.Minutes;
             step.second = currentGameTime.Seconds;
-            
+
             previousStep = step;
 
 

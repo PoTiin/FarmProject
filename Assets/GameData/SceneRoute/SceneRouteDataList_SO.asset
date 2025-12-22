@@ -13,6 +13,15 @@ MonoBehaviour:
   m_Name: SceneRouteDataList_SO
   m_EditorClassIdentifier: 
   sceneRouteList:
+  - fromSceneName: 00.Start
+    gotoSceneName: 01.Field
+    scenePathList:
+    - sceneName: 00.Start
+      fromGridCell: {x: 99999, y: 99999}
+      gotoGridCell: {x: 9, y: -18}
+    - sceneName: 01.Field
+      fromGridCell: {x: 9, y: -18}
+      gotoGridCell: {x: 99999, y: 99999}
   - fromSceneName: 01.Field
     gotoSceneName: 02.Home
     scenePathList:
