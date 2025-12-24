@@ -15,7 +15,7 @@ namespace MFarm.Save
 
         public Dictionary<string, List<SceneItem>> sceneItemDict;
 
-        private Dictionary<string, List<SceneFurniture>> sceneFurnitureDict;
+        public Dictionary<string, List<SceneFurniture>> sceneFurnitureDict;
 
         public Dictionary<string, TileDetails> tileDetailsDict;
 

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using MFarm.Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 namespace MFarm.Inventory
 {
-    public class ItemManager : MonoBehaviour
+    public class ItemManager : MonoBehaviour,ISaveable
     {
         public Item itemPrefab;
         public Item bounceItemPrefab;
@@ -13,6 +14,9 @@ namespace MFarm.Inventory
         private Dictionary<string, List<SceneItem>> sceneItemDict = new Dictionary<string, List<SceneItem>>();
         private Dictionary<string, List<SceneFurniture>> sceneFurnitureDict = new Dictionary<string, List<SceneFurniture>>();
         private Transform playerTransform => FindObjectOfType<Player>().transform;
+
+        public string GUID => GetComponent<DataGUID>().guid;
+
         private void OnEnable()
         {
             EventHandler.InstantiateItemInScene += OnInstantiateItemInScene;
@@ -29,7 +33,11 @@ namespace MFarm.Inventory
             EventHandler.DropItemEvent -= OnDropItemEvent;
             EventHandler.BuildFurnitureEvent -= OnBuildFurnitureEvent;
         }
-
+        private void Start()
+        {
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
+        }
         private void OnBuildFurnitureEvent(int ID,Vector3 mousePos)
         {
             BluePrintDetails bluePrint = InventoryManager.Instance.bluePrintData.GetBluePrintDetails(ID);
@@ -177,6 +185,24 @@ namespace MFarm.Inventory
                     }
                 }
             }
+        }
+
+        public GameSaveData GenerateSaveData()
+        {
+            GetAllSceneItems();
+            GetAllSceneFurniture();
+            GameSaveData saveData = new GameSaveData();
+            saveData.sceneItemDict = this.sceneItemDict;
+            saveData.sceneFurnitureDict = this.sceneFurnitureDict;
+            return saveData;
+        }
+
+        public void RestoreData(GameSaveData saveData)
+        {
+            this.sceneItemDict = saveData.sceneItemDict;
+            this.sceneFurnitureDict = saveData.sceneFurnitureDict;
+            RecreateAllItems();
+            RebuildFurniture();
         }
     }
 }

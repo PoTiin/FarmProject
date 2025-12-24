@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using MFarm.CropPlant;
+using MFarm.Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 namespace MFarm.Map
 {
-    public class GridMapManager : Singleton<GridMapManager>
+    public class GridMapManager : Singleton<GridMapManager>,ISaveable
     {
         private Grid currentGrid;
         [Header("种地瓦片切换信息")]
@@ -25,6 +26,7 @@ namespace MFarm.Map
         private List<ReapItem> itemInRadius;
         private Season currentSeason;
 
+        public string GUID => GetComponent<DataGUID>().guid;
 
         private void OnEnable()
         {
@@ -45,6 +47,9 @@ namespace MFarm.Map
 
         private void Start()
         {
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
+
             foreach (var mapData in mapDataList)
             {
                 firstLoadDict.Add(mapData.sceneName, true);
@@ -375,6 +380,20 @@ namespace MFarm.Map
                 }
             }
             return false;
+        }
+
+        public GameSaveData GenerateSaveData()
+        {
+            GameSaveData saveData = new GameSaveData();
+            saveData.tileDetailsDict = this.tileDetailsDict;
+            saveData.firstLoadDict = this.firstLoadDict;
+            return saveData;
+        }
+
+        public void RestoreData(GameSaveData saveData)
+        {
+            this.tileDetailsDict = saveData.tileDetailsDict;
+            this.firstLoadDict = saveData.firstLoadDict;
         }
     }
 }
