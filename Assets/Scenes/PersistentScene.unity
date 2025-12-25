@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecede9c4a54c28c42a366aed5cdbe193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guid: 
+  guid: 8cafd6f0-c49f-44b1-a846-d8a6af984a9f
 --- !u!1 &150078384
 GameObject:
   m_ObjectHideFlags: 3
@@ -593,7 +593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &196386124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,7 +769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecede9c4a54c28c42a366aed5cdbe193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guid: 
+  guid: f5926eec-1187-4f3f-b6b2-fbb75580bda0
 --- !u!1 &234685608
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,6 +860,7 @@ GameObject:
   - component: {fileID: 240622899}
   - component: {fileID: 240622898}
   - component: {fileID: 240622897}
+  - component: {fileID: 240622903}
   m_Layer: 0
   m_Name: NPC_Gril01
   m_TagString: Untagged
@@ -1069,6 +1070,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!114 &240622903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240622895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecede9c4a54c28c42a366aed5cdbe193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 03403fd7-9125-4b8d-9001-77e85d1d8b80
 --- !u!1 &241143739
 GameObject:
   m_ObjectHideFlags: 0
@@ -1235,7 +1249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!320 &281002441
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -1422,7 +1436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecede9c4a54c28c42a366aed5cdbe193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guid: 
+  guid: 95d351a2-8310-4a8f-acc2-2063509aaf87
 --- !u!1 &299524607
 GameObject:
   m_ObjectHideFlags: 0
@@ -2045,7 +2059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecede9c4a54c28c42a366aed5cdbe193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guid: 
+  guid: 453b8a46-0ead-4e4b-965e-dad8dff99db7
 --- !u!1 &606256529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2715,6 +2729,7 @@ GameObject:
   - component: {fileID: 867387851}
   - component: {fileID: 867387855}
   - component: {fileID: 867387856}
+  - component: {fileID: 867387857}
   m_Layer: 0
   m_Name: NPC_Mayor
   m_TagString: Untagged
@@ -2930,6 +2945,19 @@ MonoBehaviour:
     dialogueText: "\u4F60\u597D\u5440~\u6211\u53EBMike"
     hasToPause: 1
     isDone: 0
+--- !u!114 &867387857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867387849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecede9c4a54c28c42a366aed5cdbe193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: a6f691fa-373e-4e45-9699-210af8c989d1
 --- !u!1 &877471182
 GameObject:
   m_ObjectHideFlags: 0
@@ -4927,7 +4955,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1726649855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5110,6 +5138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1808497659}
   - component: {fileID: 1808497658}
+  - component: {fileID: 1808497660}
   m_Layer: 0
   m_Name: TransitionManager
   m_TagString: Untagged
@@ -5129,7 +5158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fe4186e98c18a48914c9bb98da764a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startSceneName: 00.Start
+  startSceneName: 01.Field
 --- !u!4 &1808497659
 Transform:
   m_ObjectHideFlags: 0
@@ -5145,6 +5174,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1808497660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808497657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecede9c4a54c28c42a366aed5cdbe193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 
 --- !u!1 &1849450584
 GameObject:
   m_ObjectHideFlags: 0
@@ -5462,6 +5504,7 @@ GameObject:
   - component: {fileID: 1949119073}
   - component: {fileID: 1949119079}
   - component: {fileID: 1949119078}
+  - component: {fileID: 1949119080}
   m_Layer: 0
   m_Name: NPC_Gril02
   m_TagString: Untagged
@@ -5696,6 +5739,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopData: {fileID: 11400000, guid: 2156f2459a8a1044f8610d3eda909cd5, type: 2}
+--- !u!114 &1949119080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949119071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecede9c4a54c28c42a366aed5cdbe193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 5a1757c7-1a7c-40e0-b384-67dddd4ae3b4
 --- !u!1 &1953957973
 GameObject:
   m_ObjectHideFlags: 0
