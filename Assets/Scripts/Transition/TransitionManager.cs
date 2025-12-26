@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 namespace MFarm.Transition
 {
-    public class TransitionManager : MonoBehaviour,ISaveable
+    public class TransitionManager : Singleton<TransitionManager>,ISaveable
     {
         [SceneName]
         public string startSceneName = string.Empty;
@@ -15,7 +15,7 @@ namespace MFarm.Transition
         private bool isFade = false;
 
         public string GUID => GetComponent<DataGUID>().guid;
-        private void Awake()
+        protected override void Awake()
         {
             SceneManager.LoadScene("UI", LoadSceneMode.Additive);
         }
