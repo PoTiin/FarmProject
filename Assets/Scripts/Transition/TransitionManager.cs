@@ -17,18 +17,37 @@ namespace MFarm.Transition
         public string GUID => GetComponent<DataGUID>().guid;
         protected override void Awake()
         {
+            base.Awake();
             SceneManager.LoadScene("UI", LoadSceneMode.Additive);
         }
 
         private void OnEnable()
         {
             EventHandler.TransitionEvent += OnTransitionEvent;
+            EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+            EventHandler.EndGameEvent += OnEndGameEvent;
         }
         private void OnDisable()
         {
             EventHandler.TransitionEvent -= OnTransitionEvent;
+            EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+            EventHandler.EndGameEvent -= OnEndGameEvent;
+        }
+        private void Start()
+        {
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
+            fadeCanvasGroup = FindObjectsOfType<CanvasGroup>().ToList().Find(f => f.name == "Fade Panel");
+        }
+        private void OnEndGameEvent()
+        {
+            StartCoroutine(UnloadScene());
         }
 
+        private void OnStartNewGameEvent(int index)
+        {
+            StartCoroutine(LoadSaveDataScene(startSceneName));
+        }
 
         private void OnTransitionEvent(string sceneToGo, Vector3 positionToGo)
         {
@@ -38,16 +57,7 @@ namespace MFarm.Transition
             }
         }
 
-        //TODO:转换成开始游戏
-        private IEnumerator Start()
-        {
-            ISaveable saveable = this;
-            saveable.RegisterSaveable();
-
-            fadeCanvasGroup = FindObjectsOfType<CanvasGroup>().ToList().Find(f => f.name == "Fade Panel");
-            yield return StartCoroutine(LoadSceneSetActive(startSceneName));
-            EventHandler.CallAfterSceneLoadedEvent();
-        }
+        
         /// <summary>
         /// 加载场景并设置为激活
         /// </summary>
@@ -87,15 +97,19 @@ namespace MFarm.Transition
         {
             Debug.Log("渐入");
             isFade = true;
+
             fadeCanvasGroup.blocksRaycasts = true;
+
             float speed = Mathf.Abs(fadeCanvasGroup.alpha - targetAlpha) / Settings.fadeDuration;
+
             while (!Mathf.Approximately(fadeCanvasGroup.alpha, targetAlpha))
             {
                 fadeCanvasGroup.alpha = Mathf.MoveTowards(fadeCanvasGroup.alpha, targetAlpha, speed * Time.deltaTime);
                 yield return null;
             }
-            fadeCanvasGroup.alpha = targetAlpha;
+
             fadeCanvasGroup.blocksRaycasts = false;
+
             isFade = false;
 
         }
@@ -113,6 +127,15 @@ namespace MFarm.Transition
             EventHandler.CallAfterSceneLoadedEvent();
             yield return Fade(0);
         }
+
+        private IEnumerator UnloadScene()
+        {
+            EventHandler.CallBeforeSceneUnloadEvent();
+            yield return Fade(1f);
+            yield return SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+            yield return Fade(0f);
+        }
+
 
         public GameSaveData GenerateSaveData()
         {

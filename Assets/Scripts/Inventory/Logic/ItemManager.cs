@@ -24,6 +24,7 @@ namespace MFarm.Inventory
             EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
             EventHandler.DropItemEvent += OnDropItemEvent;
             EventHandler.BuildFurnitureEvent += OnBuildFurnitureEvent;
+            EventHandler.StartNewGameEvent += OnStartNewGameEvent;
         }
         private void OnDisable()
         {
@@ -32,11 +33,19 @@ namespace MFarm.Inventory
             EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
             EventHandler.DropItemEvent -= OnDropItemEvent;
             EventHandler.BuildFurnitureEvent -= OnBuildFurnitureEvent;
+            EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
         }
+
+
         private void Start()
         {
             ISaveable saveable = this;
             saveable.RegisterSaveable();
+        }
+        private void OnStartNewGameEvent(int index)
+        {
+            sceneItemDict.Clear();
+            sceneFurnitureDict.Clear();
         }
         private void OnBuildFurnitureEvent(int ID,Vector3 mousePos)
         {

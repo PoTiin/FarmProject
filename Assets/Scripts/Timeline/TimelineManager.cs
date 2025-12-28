@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -25,14 +26,21 @@ public class TimelineManager : Singleton<TimelineManager>
     private void OnEnable()
     {
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+        EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+        startDirector.played += OnPlayed;
+        startDirector.stopped += OnStopped;
     }
 
- 
+    
 
     private void OnDisable()
     {
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+        EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
     }
+
+   
+
     public void PauseTimeline(PlayableDirector director)
     {
         currentDirector = director;
@@ -46,13 +54,29 @@ public class TimelineManager : Singleton<TimelineManager>
             isPause = false;
             currentDirector.playableGraph.GetRootPlayable(0).SetSpeed(1d);
         }
+        //if (startDirector.playableGraph.IsValid() && startDirector.playableGraph.IsPlaying())
+        //{
+        //    //EventHandler.CallUpdateGameStateEvent(GameState.Pause);
+        //}
     }
     private void OnAfterSceneLoadedEvent()
     {
-        currentDirector = FindObjectOfType<PlayableDirector>();
-        if (currentDirector != null)
-        {
-            currentDirector.Play();
-        }
+        if (!startDirector.isActiveAndEnabled)
+            EventHandler.CallUpdateGameStateEvent(GameState.Gameplay);
+    }
+    private void OnStartNewGameEvent(int obj)
+    {
+        if (startDirector != null)
+            startDirector.Play();
+    }
+    private void OnStopped(PlayableDirector director)
+    {
+        EventHandler.CallUpdateGameStateEvent(GameState.Gameplay);
+        startDirector.enabled = false;
+    }
+
+    private void OnPlayed(PlayableDirector director)
+    {
+        EventHandler.CallUpdateGameStateEvent(GameState.Pause);
     }
 }

@@ -25,6 +25,7 @@ public class Player : MonoBehaviour,ISaveable
     {
         rb = GetComponent<Rigidbody2D>();
         animators = GetComponentsInChildren<Animator>();
+        inputDisable = true;
     }
     private void Start()
     {
@@ -38,6 +39,8 @@ public class Player : MonoBehaviour,ISaveable
         EventHandler.MoveToPosition += OnMoveToPosition;
         EventHandler.MouseClickEvent += OnMouseClickedEvent;
         EventHandler.UpdateGameStateEvent += OnUpdateGameStateEvent;
+        EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+        EventHandler.EndGameEvent += OnEndGameEvent;
     }
     private void OnDisable()
     {
@@ -46,7 +49,11 @@ public class Player : MonoBehaviour,ISaveable
         EventHandler.MoveToPosition -= OnMoveToPosition;
         EventHandler.MouseClickEvent -= OnMouseClickedEvent;
         EventHandler.UpdateGameStateEvent -= OnUpdateGameStateEvent;
+        EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+        EventHandler.EndGameEvent -= OnEndGameEvent;
     }
+
+
     private void Update()
     {
         if (!inputDisable)
@@ -65,6 +72,17 @@ public class Player : MonoBehaviour,ISaveable
         if (!inputDisable)
             Movement();
     }
+
+    private void OnEndGameEvent()
+    {
+        inputDisable = true;
+    }
+    private void OnStartNewGameEvent(int index)
+    {
+        inputDisable = false;
+        transform.position = Settings.playerStartPos;
+    }
+
     private void OnUpdateGameStateEvent(GameState gameState)
     {
         switch (gameState)
@@ -133,7 +151,7 @@ public class Player : MonoBehaviour,ISaveable
 
     private void OnAfterSceneLoadedEvent()
     {
-        inputDisable = false;
+        //inputDisable = false;
         
     }
 

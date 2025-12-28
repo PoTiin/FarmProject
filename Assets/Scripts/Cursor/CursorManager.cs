@@ -53,6 +53,7 @@ public class CursorManager : MonoBehaviour
         buildImage.gameObject.SetActive(false);
         currentSprite = normal;
         SetCursorImage(normal);
+        mainCamera = Camera.main;
     }
     private void Update()
     {
@@ -176,10 +177,7 @@ public class CursorManager : MonoBehaviour
                 case ItemType.Commodity:
                     if (currentTile.canDropItem && currentItem.canDropped) SetCursorVaild(); else SetCursorInVaild();
                     break;
-                case ItemType.Furniture:
-                    if (currentTile.canPlaceFurniture && InventoryManager.Instance.CheckStock(currentItem.itemId)) SetCursorVaild(); else SetCursorInVaild();
-                    
-                    break;
+                
                 case ItemType.HoeTool:
                     if (currentTile.canDig) SetCursorVaild(); else SetCursorInVaild();
                     break;
@@ -215,6 +213,15 @@ public class CursorManager : MonoBehaviour
                     break;
                 case ItemType.ReapableScenery:
                     break;
+                case ItemType.Furniture:
+                    buildImage.gameObject.SetActive(true);
+                    var bluePrintDetails = InventoryManager.Instance.bluePrintData.GetBluePrintDetails(currentItem.itemId);
+
+                    if (currentTile.canPlaceFurniture && InventoryManager.Instance.CheckStock(currentItem.itemId) && !HaveFurnitureInRadius(bluePrintDetails)) 
+                        SetCursorVaild(); 
+                    else 
+                        SetCursorInVaild();
+                    break;
                 default:
                     break;
             }
@@ -223,6 +230,16 @@ public class CursorManager : MonoBehaviour
         {
             SetCursorInVaild();
         }
+    }
+
+    private bool HaveFurnitureInRadius(BluePrintDetails bluePrintDetails)
+    {
+        var buildItem = bluePrintDetails.buildPrefab;
+        Vector2 point = mouseWorldPos;
+        var size = buildItem.GetComponent<BoxCollider2D>().size;
+
+        var otherColl = Physics2D.OverlapBox(point, size, 0);
+        return otherColl ? otherColl.GetComponent<Furniture>():false;
     }
     /// <summary>
     ///  «∑Ò”ÎUIª•∂Ø

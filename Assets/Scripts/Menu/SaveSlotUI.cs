@@ -1,4 +1,5 @@
 using MFarm.Save;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,15 @@ public class SaveSlotUI : MonoBehaviour
         currentButton = GetComponent<Button>();
         currentButton.onClick.AddListener(LoadGameData);
     }
+    private void OnEnable()
+    {
+        SetupSlotUI();
+    }
+
+    private void Start()
+    {
+        
+    }
 
     private void SetupSlotUI()
     {
@@ -23,12 +33,26 @@ public class SaveSlotUI : MonoBehaviour
         if(currentData != null)
         {
             dataTime.text = currentData.DataTime;
-
+            dataScene.text = currentData.DataScene;
+        }
+        else
+        {
+            dataTime.text = "这个世界还没开始";
+            dataScene.text = "梦还没开始";
         }
     }
 
     private void LoadGameData()
     {
-        Debug.Log(Index);
+        if (currentData != null)
+        {
+            SaveLoadManager.Instance.Load(Index);
+        }
+        else
+        {
+            Debug.Log("新游戏");
+            //EventHandler.CallShowIntroMovieAndStartEvent(Index);
+            EventHandler.CallStartNewGameEvent(Index);
+        }
     }
 }
