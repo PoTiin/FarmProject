@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using MFarm.Save;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 namespace MFarm.Inventory
 {
@@ -12,7 +11,10 @@ namespace MFarm.Inventory
         public ItemDataList_SO itemDataList_SO;
         [Header("建造蓝图")]
         public BluePrintDataList_SO bluePrintData;
+
         [Header("背包数据")]
+        public InventoryBag_SO playerBagTemp;
+        
         public InventoryBag_SO playerBag;
         [Header("交易")]
         private InventoryBag_SO currentBoxBag;
@@ -30,6 +32,7 @@ namespace MFarm.Inventory
             EventHandler.HarvestAtPlayerPosition += OnHarvestAtPlayerPosition;
             EventHandler.BuildFurnitureEvent += OnBuildFurnitureEvent;
             EventHandler.BaseBagOpenEvent += OnBaseBagOpenEvent;
+            EventHandler.StartNewGameEvent += OnStartNewGameEvent;
         }
 
         
@@ -40,6 +43,7 @@ namespace MFarm.Inventory
             EventHandler.HarvestAtPlayerPosition -= OnHarvestAtPlayerPosition;
             EventHandler.BuildFurnitureEvent -= OnBuildFurnitureEvent;
             EventHandler.BaseBagOpenEvent -= OnBaseBagOpenEvent;
+            EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
         }
 
         
@@ -48,8 +52,17 @@ namespace MFarm.Inventory
         {
             ISaveable saveable = this;
             saveable.RegisterSaveable();
+            //EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemList);
+        }
+
+        private void OnStartNewGameEvent(int obj)
+        {
+            playerBag = Instantiate(playerBagTemp);
+            playerMoney = Settings.playerStartMoney;
+            boxDataDict.Clear();
             EventHandler.CallUpdateInventoryUI(InventoryLocation.Player, playerBag.itemList);
         }
+
         private void OnBaseBagOpenEvent(SlotType slotType, InventoryBag_SO bag_SO)
         {
             currentBoxBag = bag_SO;
@@ -346,6 +359,7 @@ namespace MFarm.Inventory
         public void RestoreData(GameSaveData saveData)
         {
             this.playerMoney = saveData.playerMoney;
+            playerBag = Instantiate(playerBagTemp);
             playerBag.itemList = saveData.inventoryDict[playerBag.name];
             foreach (var item in saveData.inventoryDict)
             {

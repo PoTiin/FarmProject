@@ -13,50 +13,50 @@ MonoBehaviour:
   m_Name: PlayerBag
   m_EditorClassIdentifier: 
   itemList:
-  - itemID: 1012
-    itemAmount: 99
-  - itemID: 1013
-    itemAmount: 99
-  - itemID: 1002
-    itemAmount: 99
-  - itemID: 1027
-    itemAmount: 99
-  - itemID: 1003
-    itemAmount: 99
-  - itemID: 1022
-    itemAmount: 99
-  - itemID: 1021
-    itemAmount: 99
-  - itemID: 1015
-    itemAmount: 99
-  - itemID: 1029
-    itemAmount: 97
-  - itemID: 1028
-    itemAmount: 99
-  - itemID: 1009
-    itemAmount: 99
-  - itemID: 1010
-    itemAmount: 79
-  - itemID: 1006
-    itemAmount: 99
-  - itemID: 1011
-    itemAmount: 79
-  - itemID: 1011
-    itemAmount: 99
-  - itemID: 1001
-    itemAmount: 99
-  - itemID: 1002
-    itemAmount: 99
-  - itemID: 1017
-    itemAmount: 99
   - itemID: 0
     itemAmount: 0
   - itemID: 0
     itemAmount: 0
   - itemID: 0
     itemAmount: 0
-  - itemID: 1014
-    itemAmount: 99
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
+  - itemID: 0
+    itemAmount: 0
   - itemID: 0
     itemAmount: 0
   - itemID: 0

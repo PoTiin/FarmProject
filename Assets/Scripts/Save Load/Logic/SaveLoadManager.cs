@@ -20,6 +20,38 @@ namespace MFarm.Save
         {
             base.Awake();
             jsonFolder = Application.persistentDataPath + "/Save Data/";
+            ReadSaveData();
+        }
+
+        private void OnEnable()
+        {
+            EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+            EventHandler.EndGameEvent += OnEndGameEvent;
+        }
+
+        private void OnDisable()
+        {
+            EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+            EventHandler.EndGameEvent -= OnEndGameEvent;
+        }
+
+        
+
+        private void Update()
+        {
+            //if (Input.GetKeyDown(KeyCode.I))
+            //    Save(currentDataIndex);
+            //if (Input.GetKeyDown(KeyCode.O))
+            //    Load(currentDataIndex);
+        }
+        private void OnEndGameEvent()
+        {
+            Save(currentDataIndex);
+        }
+
+        private void OnStartNewGameEvent(int index)
+        {
+            currentDataIndex = index;
         }
 
         public void RegisterSaveable(ISaveable saveable)
@@ -30,13 +62,24 @@ namespace MFarm.Save
             }
         }
 
-        private void Update()
+        private void ReadSaveData()
         {
-            if (Input.GetKeyDown(KeyCode.I))
-                Save(currentDataIndex);
-            if (Input.GetKeyDown(KeyCode.O))
-                Load(currentDataIndex);
+            if (Directory.Exists(jsonFolder))
+            {
+                for (int i = 0; i < dataSlots.Count; i++)
+                {
+                    var resultPath = jsonFolder + "data" + i + ".json";
+                    if (File.Exists(resultPath))
+                    {
+                        var stringData = File.ReadAllText(resultPath);
+                        var jsonData = JsonConvert.DeserializeObject<DataSlot>(stringData);
+                        dataSlots[i] = jsonData;
+                    }
+                }
+            }
         }
+
+        
         private void Save(int index)
         {
             DataSlot data = new DataSlot();
@@ -53,11 +96,13 @@ namespace MFarm.Save
             {
                 Directory.CreateDirectory(jsonFolder);
             }
+
+            Debug.Log("DATA" + index + "SAVED!");
             File.WriteAllText(resultPath, jsonData);
 
         }
 
-        private void Load(int index)
+        public void Load(int index)
         {
             currentDataIndex = index;
             var resultPath = jsonFolder + "data" + index + ".json";

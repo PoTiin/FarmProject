@@ -38,4 +38,8 @@ public class Settings
 
     public static TimeSpan morningTime = new TimeSpan(5, 0, 0);
     public static TimeSpan nightTime = new TimeSpan(19, 0, 0);
+
+    public static Vector3 playerStartPos = new Vector3(12, -11, 0);
+
+    public const int playerStartMoney = 100;
 }

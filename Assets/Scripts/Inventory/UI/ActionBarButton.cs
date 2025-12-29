@@ -44,7 +44,6 @@ namespace MFarm.Inventory
         private void OnUpdateGameStateEvent(GameState gameState)
         {
             canUse = gameState == GameState.Gameplay;
-            Debug.Log(canUse);
         }
     }
 }

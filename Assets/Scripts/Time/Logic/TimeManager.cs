@@ -17,16 +17,14 @@ public class TimeManager : Singleton<TimeManager>,ISaveable
 
     public string GUID => GetComponent<DataGUID>().guid;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        NewGameTime();
-    }
     private void OnEnable()
     {
         EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
         EventHandler.UpdateGameStateEvent += OnUpdateGameStateEvent;
+
+        EventHandler.StartNewGameEvent += OnStartNewGameEvent;
+        EventHandler.EndGameEvent += OnEndGameEvent;
     }
 
     private void OnDisable()
@@ -34,16 +32,20 @@ public class TimeManager : Singleton<TimeManager>,ISaveable
         EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
         EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
         EventHandler.UpdateGameStateEvent -= OnUpdateGameStateEvent;
+        EventHandler.StartNewGameEvent -= OnStartNewGameEvent;
+        EventHandler.EndGameEvent -= OnEndGameEvent;
     }
 
+   
 
     private void Start()
     {
         ISaveable saveable = this;
         saveable.RegisterSaveable();
-        EventHandler.CallGameDataEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
-        EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
-        EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
+        gameClockPause = true;
+        //EventHandler.CallGameDataEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
+        //EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
+        //EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
     }
     private void Update()
     {
@@ -77,13 +79,24 @@ public class TimeManager : Singleton<TimeManager>,ISaveable
             EventHandler.CallGameDataEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
         }
     }
+    private void OnEndGameEvent()
+    {
+        gameClockPause = true;
+    }
+
+    private void OnStartNewGameEvent(int index)
+    {
+        NewGameTime();
+        gameClockPause = true;
+    }
+
     private void OnBeforeSceneUnloadEvent()
     {
         gameClockPause = true;
     }
     private void OnAfterSceneLoadedEvent()
     {
-        gameClockPause = false;
+        //gameClockPause = false;
         EventHandler.CallGameDataEvent(gameHour, gameDay, gameMonth, gameYear, gameSeason);
         EventHandler.CallGameMinuteEvent(gameMinute, gameHour, gameDay, gameSeason);
         EventHandler.CallLightShiftChangeEvent(gameSeason, GetCurrentLightShift(), timeDifference);
@@ -168,7 +181,6 @@ public class TimeManager : Singleton<TimeManager>,ISaveable
         if(GameTime < Settings.morningTime || GameTime >= Settings.nightTime)
         {
             timeDifference = Mathf.Abs((float)(GameTime - Settings.nightTime).TotalMinutes);
-            Debug.Log(timeDifference);
             return LightShift.Night;
         }
         return LightShift.Morning;
